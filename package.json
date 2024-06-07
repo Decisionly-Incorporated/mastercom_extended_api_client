@@ -4,11 +4,14 @@
   "description": "Generated Mastercom API client",
   "main": "api.ts",
   "scripts": {
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "^2.13.4"
+    "@openapitools/openapi-generator-cli": "^2.13.4",
+    "typescript": "^5.4.5"
   }
 }
