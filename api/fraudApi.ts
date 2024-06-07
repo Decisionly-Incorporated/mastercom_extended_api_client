@@ -11,7 +11,7 @@
  */
 
 
-import localVarRequest from 'request';
+import * as localVarRequest from 'request';
 import * as http from 'http';
 
 /* tslint:disable:no-unused-locals */
