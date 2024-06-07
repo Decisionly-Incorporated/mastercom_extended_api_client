@@ -1,4 +1,13 @@
 {
+  "name": "mastercom_api_client",
+  "version": "1.0.0",
+  "description": "Generated Mastercom API client",
+  "main": "api.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.13.4"
   }
