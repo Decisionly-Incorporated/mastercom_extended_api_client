@@ -2,16 +2,20 @@
   "name": "mastercom_api_client",
   "version": "1.0.0",
   "description": "Generated Mastercom API client",
-  "main": "api.ts",
+  "main": "api.js",
   "scripts": {
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
+    "build": "tsc",
+    "clean": "tsc --clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.13.4",
+    "@types/node": "^20.14.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "request": "^2.88.2"
   }
 }

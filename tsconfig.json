@@ -1,0 +1,8 @@
+{
+  "files": [
+    "api.ts",
+  ],
+  "compilerOptions": {
+    "esModuleInterop": true
+  }
+}
