@@ -46,9 +46,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.QueuesApi = exports.QueuesApiApiKeys = void 0;
-var localVarRequest = require("request");
+var request_1 = __importDefault(require("request"));
 var models_1 = require("../model/models");
 var apis_1 = require("./apis");
 var defaultBasePath = 'https://api.mastercard.com/mastercom';
@@ -173,7 +176,7 @@ var QueuesApi = /** @class */ (function () {
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
@@ -249,7 +252,7 @@ var QueuesApi = /** @class */ (function () {
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
@@ -319,7 +322,7 @@ var QueuesApi = /** @class */ (function () {
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            localVarRequest(localVarRequestOptions, function (error, response, body) {
+                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }

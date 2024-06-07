@@ -11,8 +11,8 @@
  */
 
 
-import * as localVarRequest from 'request';
-import * as http from 'http';
+import localVarRequest from 'request';
+import http from 'http';
 
 /* tslint:disable:no-unused-locals */
 import { CreateRetrievalRequestSingle } from '../model/createRetrievalRequestSingle';

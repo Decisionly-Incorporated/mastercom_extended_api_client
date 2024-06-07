@@ -1,4 +1,4 @@
-import * as localVarRequest from 'request';
+import localVarRequest from 'request';
 
 export * from './acquirerFulfillmentRequest';
 export * from './acquirerFulfillmentResponse';
