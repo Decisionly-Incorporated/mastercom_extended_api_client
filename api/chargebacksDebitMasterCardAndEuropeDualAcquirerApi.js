@@ -48,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChargebacksDebitMasterCardAndEuropeDualAcquirerApi = exports.ChargebacksDebitMasterCardAndEuropeDualAcquirerApiApiKeys = void 0;
-var request_1 = require("request");
+var localVarRequest = require("request");
 var models_1 = require("../model/models");
 var apis_1 = require("./apis");
 var defaultBasePath = 'https://api.mastercard.com/mastercom';
@@ -171,7 +171,7 @@ var ChargebacksDebitMasterCardAndEuropeDualAcquirerApi = /** @class */ (function
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
+                            localVarRequest(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
@@ -253,7 +253,7 @@ var ChargebacksDebitMasterCardAndEuropeDualAcquirerApi = /** @class */ (function
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
+                            localVarRequest(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
@@ -341,7 +341,7 @@ var ChargebacksDebitMasterCardAndEuropeDualAcquirerApi = /** @class */ (function
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
+                            localVarRequest(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
@@ -431,7 +431,7 @@ var ChargebacksDebitMasterCardAndEuropeDualAcquirerApi = /** @class */ (function
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
+                            localVarRequest(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
@@ -507,7 +507,7 @@ var ChargebacksDebitMasterCardAndEuropeDualAcquirerApi = /** @class */ (function
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
+                            localVarRequest(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
@@ -583,7 +583,7 @@ var ChargebacksDebitMasterCardAndEuropeDualAcquirerApi = /** @class */ (function
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
+                            localVarRequest(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
@@ -671,7 +671,7 @@ var ChargebacksDebitMasterCardAndEuropeDualAcquirerApi = /** @class */ (function
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
+                            localVarRequest(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
