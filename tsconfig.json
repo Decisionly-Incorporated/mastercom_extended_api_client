@@ -2,7 +2,9 @@
   "compilerOptions": {
     "esModuleInterop": true
   },
-  "files": [
+  "include": [
     "api.ts",
+    "model/*.ts",
+    "api/*.ts"
   ]
 }
