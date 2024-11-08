@@ -1,0 +1,4127 @@
+openapi: 3.0.3
+info:
+  title: Mastercom Extended API
+  description: The Mastercom Extended API consists of endpoints used by issuers and acquirers to manage Single Message System disputes.
+  contact:
+    name: API Support
+    email: apisupport@mastercard.com
+    url: "https://developer.mastercard.com/support"
+  version: 2.0.0
+servers:
+  - url: "https://dispute.mastercard.com/mastercom-extended"
+    description: Production Server
+  - url: "https://sandbox.dispute.mastercard.com/mastercom-extended"
+    description: Sandbox Server
+externalDocs:
+  description: View API documentation
+  url: "https://developer.mastercard.com/mastercom-extended/documentation/"
+tags:
+  - name: Case Filing
+    description: Create, update, respond, or retrieve details of a case
+  - name: Case Filing Documents
+    description: Search for a document, attach a document, or retrieve a document associated with a case
+  - name: Chargebacks
+    description: Update or reverse a chargeback
+  - name: Claims
+    description: Search for a claim, create a claim, or retrieve details of a claim
+  - name: Disputes
+    description: Initiate a dispute
+  - name: Documents
+    description: Search for a document, upload a document, or retrieve a document
+  - name: Queues
+    description: Retrieve fields within a queue or claims within a specific queue
+  - name: Reports
+    description: Search for reports, create a report, or retrieve a report
+  - name: Report Definitions
+    description: Retrieve fields within reports
+  - name: Representments
+    description: Create, update, or reverse a representment
+  - name: Transactions
+    description: Search for transactions
+paths:
+  "/documents":
+    post:
+      summary: Upload documents
+      tags:
+        - Documents
+      description: |
+        Issuers and acquirers use this endpoint to upload documents.
+
+        Supported file formats:
+
+        *  PDF
+        *  JPEG, JPG
+        *  ZIP
+        *  TIFF
+      operationId: uploadDocument
+      requestBody:
+        $ref: "#/components/requestBodies/Document"
+      responses:
+        "201":
+          $ref: "#/components/responses/DocumentUpload"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/{claim_id}/chargebacks/{event_id}/reversals":
+    post:
+      summary: Reverse a chargeback
+      tags:
+        - Chargebacks
+      description: Issuers use this endpoint to reverse existing chargebacks.
+      operationId: reverseChargeback
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+        - $ref: "#/components/parameters/EventIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/ChargebackReversal"
+      responses:
+        "201":
+          $ref: "#/components/responses/ChargebackReversalEventId"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/{claim_id}/events/{event_id}/documents":
+    put:
+      summary: Attach documents
+      tags:
+        - Documents
+      description:
+        Issuers and acquirers use this endpoint to attach previously uploaded documents to
+        existing dispute events.
+      operationId: updateDocument
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+        - $ref: "#/components/parameters/EventIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/Documents"
+      responses:
+        "204":
+          $ref: "#/components/responses/DocumentsResponse"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/searches":
+    post:
+      summary: Retrieve list of claims
+      tags:
+        - Claims
+      description: Issuers and acquirers use this endpoint to retrieve a list of claims.
+      operationId: searchClaim
+      requestBody:
+        $ref: "#/components/requestBodies/ClaimSearch"
+      responses:
+        "200":
+          $ref: "#/components/responses/ClaimsList"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/{claim_id}/disputes":
+    post:
+      summary: Initiate a dispute (chargeback)
+      tags:
+        - Disputes
+      description: Issuers use this endpoint to initiate a dispute. At this time, only creating a chargeback is supported.
+      operationId: createDisputes
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/InitiateDispute"
+      responses:
+        "201":
+          $ref: "#/components/responses/DisputesCreateEvent"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/documents/attributes":
+    get:
+      summary: Check document details
+      tags:
+        - Documents
+      description:
+        Issuers and acquirers use this endpoint to get the details of documentation attached to their events,
+        including status.
+      operationId: getDocumentsAttributes
+      parameters:
+        - $ref: "#/components/parameters/EventIdsParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/DocumentAttributes"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/documents/{document_completed_id}":
+    get:
+      summary: Retrieve processed documents
+      tags:
+        - Documents
+      description: Issuers and acquirers use this endpoint to retrieve processed documents.
+      operationId: retrieveDocument
+      parameters:
+        - $ref: "#/components/parameters/DocumentIdParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/DocumentRetrieve"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/queues":
+    get:
+      summary: Retrieve list of queue fields
+      tags:
+        - Queues
+      description: Issuers and acquirers use this endpoint to retrieve a list of queues and their fields.
+      operationId: getQueueList
+      parameters:
+        - $ref: "#/components/parameters/OffsetParameter"
+        - $ref: "#/components/parameters/LimitParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/QueueDefinitionsList"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/reports":
+    post:
+      summary: Request report creation
+      tags:
+        - Reports
+      description: |
+        Issuers and acquirers use this endpoint to request the creation of report.
+
+        NOTE : The system requires at least 120 seconds to generate a report.
+      operationId: createReport
+      requestBody:
+        $ref: "#/components/requestBodies/ReportsCreate"
+      responses:
+        "201":
+          $ref: "#/components/responses/CreatedReportDetails"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/reports/searches":
+    post:
+      summary: Search for reports
+      tags:
+        - Reports
+      description: Issuers and acquirers use this endpoint to obtain a report status and reportCompletedId.
+      operationId: searchReport
+      requestBody:
+        $ref: "#/components/requestBodies/ReportSearch"
+      responses:
+        "200":
+          $ref: "#/components/responses/ReportList"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims":
+    post:
+      summary: Create new claim
+      tags:
+        - Claims
+      description: Issuers and acquirers use this endpoint to create a new claim.
+      operationId: createClaim
+      requestBody:
+        $ref: "#/components/requestBodies/CreateClaim"
+      responses:
+        "201":
+          $ref: "#/components/responses/ClaimCreateId"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/{claim_id}/chargebacks/{event_id}":
+    put:
+      summary: Update a chargeback
+      tags:
+        - Chargebacks
+      description:
+        Acquirers use this endpoint to acknowledge a chargeback, which moves the claim to the Worked
+        queue. Acquirers may take further actions on acknowledged claims.
+      operationId: updateChargeback
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+        - $ref: "#/components/parameters/EventIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/ChargebackUpdate"
+      responses:
+        "204":
+          $ref: "#/components/responses/ChargebackUpdateStatus"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/reports/{report_request_id}/status":
+    get:
+      summary: Retrieve report status
+      tags:
+        - Reports
+      description: Issuers and acquirers use this endpoint to retrieve the status of a specific report.
+      operationId: getReportStatus
+      parameters:
+        - $ref: "#/components/parameters/ReportRequestIdParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/ReportsStatus"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/reports/{report_completed_id}":
+    get:
+      summary: Retrieve completed report
+      tags:
+        - Reports
+      description: Issuers and acquirers use this endpoint to retrieve a completed report.
+      operationId: getReport
+      parameters:
+        - $ref: "#/components/parameters/ReportIdParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/Report"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/report-definitions":
+    get:
+      summary: Retrieve list of report fields
+      tags:
+        - Report Definitions
+      description: |
+        Issuers and acquirers use this endpoint to retrieve a list of reports and their fields.
+
+        To see a list of available standard reports, refer to the Tutorials and Guides section of the Mastercom Extended API Specifications.
+      operationId: getReportDefinitions
+      parameters:
+        - $ref: "#/components/parameters/OffsetParameter"
+        - $ref: "#/components/parameters/LimitParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/ReportDefinitionList"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/report-definitions/{report_definition_id}":
+    get:
+      summary: Retrieve report fields
+      tags:
+        - Report Definitions
+      description: Issuers and acquirers use this endpoint to retrieve fields within a specific report.
+      operationId: getReportDefinition
+      parameters:
+        - $ref: "#/components/parameters/ReportDefinitionIdParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/ReportDefinition"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/{claim_id}/chargebacks/{event_id}/representments":
+    post:
+      summary: Create a representment
+      tags:
+        - Representments
+      description: Acquirers use the endpoint to create a representment.
+      operationId: representmentCreate
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+        - $ref: "#/components/parameters/EventIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/RepresentmentCreate"
+      responses:
+        "201":
+          $ref: "#/components/responses/RepresentmentCreateResponse"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/queues/{queue_id}":
+    get:
+      summary: Retrieve queue fields
+      tags:
+        - Queues
+      description: Issuers and acquirers use this endpoint to retrieve fields within a specific queue.
+      operationId: getQueueDefinition
+      parameters:
+        - $ref: "#/components/parameters/QueueIdParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/QueueDefinition"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/queues/{queue_id}/claims":
+    get:
+      summary: Retrieve list of claims in a queue
+      tags:
+        - Queues
+      description: |
+        Issuers and acquirers use this endpoint to retrieve a list of claims in a queue within a specified
+        date range.
+
+        | Queue Name  | Queue ID    | Sort Key    | Sort Order  | Maximum Time Frame  |
+        | ----------- | ----------- | ----------- | ----------- | -----------         |
+        |Acquirer Collaboration Unworked | 1 | eventExpiryDateTime | ASC | Future 3 Days |
+        |Acquirer First Chargeback Unworked | 11 | eventExpiryDateTime | ASC | Future 45 Days |
+        |Acquirer Worked | 12 | eventLastUpdateDate | DESC | Past 45 Days |
+        |Claims with No Activity | 19 | claimCreateDate | ASC | Past 46 Days |
+        |Closed Claim | 5 | claimLastUpdatedDateTime | DESC | Past 30 Days |
+        |Issuer Collaboration Unworked | 20 | eventExpiryDateTime | ASC | Future 3 Days |
+        |Issuer Representment Unworked | 25 | eventExpiryDateTime | ASC | Future 45 Days |
+        |Issuer Worked | 9 | eventLastUpdateDate | DESC | Past 45 Days |
+        |Pending Documentation | 10 | eventExpiryDateTime | ASC | Future 45 Days |
+        |Rejects | 8 | eventExpiryDateTime | ASC | Future 45 Days |
+        | Sender Case Filing | 26 | caseId | DESC | N/A |
+        | Receiver Case Filing | 27 | caseId | DESC | N/A |
+        ||||||
+
+        To see details about the fields included in each queue, refer to the Tutorials and Guides section of the Mastercom Extended API Specifications.
+
+      operationId: queueSearch
+      parameters:
+        - $ref: "#/components/parameters/QueueIdParameter"
+        - $ref: "#/components/parameters/StartDateTimeParameter"
+        - $ref: "#/components/parameters/EndDateTimeParameter"
+        - $ref: "#/components/parameters/OffsetParameter"
+        - $ref: "#/components/parameters/LimitParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/Queue"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/{claim_id}/representments/{event_id}/reversals":
+    post:
+      summary: Reverse a representment
+      tags:
+        - Representments
+      description: Acquirers use this endpoint to reverse existing representments.
+      operationId: reverseRepresentment
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+        - $ref: "#/components/parameters/EventIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/RepresentmentsReversal"
+      responses:
+        "201":
+          $ref: "#/components/responses/RepresentmentReversalEventId"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/{claim_id}/representments/{event_id}":
+    put:
+      summary: Update a representment
+      tags:
+        - Representments
+      description:
+        Issuers use this endpoint to acknowledge a representment, which moves the claim to the Worked
+        queue. Issuers may take further actions on acknowledged claims.
+      operationId: updateRepresentment
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+        - $ref: "#/components/parameters/EventIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/RepresentmentUpdate"
+      responses:
+        "204":
+          $ref: "#/components/responses/RepresentmentWithNoEvent"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/transactions/searches":
+    post:
+      summary: Search for transactions
+      tags:
+        - Transactions
+      description: Issuers and acquirers use this endpoint to search for transactions.
+      operationId: transactionSearch
+      requestBody:
+        $ref: "#/components/requestBodies/TransactionSearch"
+      responses:
+        "200":
+          $ref: "#/components/responses/TransactionList"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/claims/{claim_id}":
+    get:
+      summary: Retrieve details for existing claim
+      tags:
+        - Claims
+      description: Issuers and acquirers use this endpoint to retrieve details for an existing claim.
+      operationId: retrieveClaim
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+        - $ref: "#/components/parameters/ClaimEntitiesParameter"
+        - $ref: "#/components/parameters/ClaimUnmaskedResponseDataParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/ClaimDetails"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/cases/arbitrations":
+    post:
+      summary: Create a new pre-arbitration or arbitration case
+      tags:
+        - Case Filing
+      description: Sender (issuers) use this endpoint to create a pre-arbitration or arbitration case.
+      operationId: createPreArbOrArbCase
+      parameters:
+        - $ref: "#/components/parameters/ArbitrationCaseTypeParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/ArbitrationCaseCreate"
+      responses:
+        "201":
+          $ref: "#/components/responses/ArbitrationCaseCreateCaseId"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/cases/compliances":
+    post:
+      summary: Create a new pre-compliance or compliance case
+      tags:
+        - Case Filing
+      description: Senders use this endpoint to create a pre-compliance or compliance case.
+      operationId: createPreCompOrCompCase
+      parameters:
+        - $ref: "#/components/parameters/ComplianceCaseTypeParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/ComplianceCaseCreate"
+      responses:
+        "201":
+          $ref: "#/components/responses/ComplianceCaseCreateCaseId"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/cases/{case_id}/arbitrations":
+    put:
+      summary: Update or respond to a pre-arbitration or arbitration case
+      tags:
+        - Case Filing
+      description: Senders (issuers) and receivers (acquirers) use this endpoint to update or respond to a pre-arbitration or arbitration case.
+      operationId: takeActionOnArbitrationCase
+      parameters:
+        - $ref: "#/components/parameters/CaseIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/CaseTakeActionArbitration"
+      responses:
+        "204":
+          $ref: "#/components/responses/CaseTakeActionStatus"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/cases/{case_id}/compliances":
+    put:
+      summary: Update or respond to a pre-compliance or compliance case
+      tags:
+        - Case Filing
+      description: Senders and receivers use this endpoint to update or respond to a pre-compliance or compliance case.
+      operationId: takeActionOnComplianceCase
+      parameters:
+        - $ref: "#/components/parameters/CaseIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/CaseTakeActionCompliance"
+      responses:
+        "204":
+          $ref: "#/components/responses/CaseTakeActionStatus"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/cases/{case_id}":
+    get:
+      summary: Retrieve details for existing case
+      tags:
+        - Case Filing
+      description: Senders and receivers use this endpoint to retrieve details for an existing case.
+      operationId: retrieveCaseDetails
+      parameters:
+        - $ref: "#/components/parameters/CaseIdParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/CaseDetailsRetrieve"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/cases/{case_id}/documents":
+    get:
+      summary: Retrieve processed documents associated with cases
+      tags:
+        - Case Filing Documents
+      description: Senders and receivers use this endpoint to retrieve all documents from a case. The documents include any documents attached by the sender, receiver, or both.
+      operationId: retrieveCaseDocuments
+      parameters:
+        - $ref: "#/components/parameters/CaseIdParameter"
+        - $ref: "#/components/parameters/DownloadFormatParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/DocumentRetrieve"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+    put:
+      summary: Attach a new document to a case after a document failed to process
+      tags:
+        - Case Filing Documents
+      description: |
+        Senders and receivers use this endpoint to attach a new document to an existing case when the previous document failed to process.  Document processing status can be retrieved from the ```GET /cases/documents/attributes``` endpoint.
+      operationId: retryDocumentUpload
+      parameters:
+        - $ref: "#/components/parameters/CaseIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/CaseTakeActionDocumentRetry"
+      responses:
+        "204":
+          $ref: "#/components/responses/CaseTakeActionStatus"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+  "/cases/documents/attributes":
+    get:
+      summary: Retrieve statuses for documents associated with cases
+      tags:
+        - Case Filing Documents
+      description: Senders and receivers use this endpoint to retrieve the processing status of documents associated with cases.
+      operationId: obtainCasesDocumentAttributes
+      parameters:
+        - $ref: "#/components/parameters/CaseIdsParameter"
+      responses:
+        "200":
+          $ref: "#/components/responses/CasesDocumentAttributes"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+
+components:
+  parameters:
+    DocumentIdParameter:
+      name: document_completed_id
+      in: path
+      description: |
+        Identifier assigned by Mastercom to the document when processing is complete, obtained from the ```POST /documents/attributes``` endpoint.
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 38
+      example: "400000011952"
+    ClaimIdParameter:
+      name: claim_id
+      in: path
+      description: Identifier assigned by Mastercom to the claim, obtained from the ```POST /claims/searches``` endpoint.
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 20
+      example: "700000022591"
+    ClaimEntitiesParameter:
+      name: claim_entities
+      in: query
+      description: |
+        To return the valid actions for claim, specify VALID_ACTIONS in this parameter.
+        To return specific dispute events, specify those events in this parameter.
+        If this field is blank, all events and valid actions will be returned.
+
+        *Available values:* TRANSACTION, COLLABORATION, CHARGEBACK, VALID_ACTIONS, ADJUSTMENT, REPRESENTMENT, CASE_FILING
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - TRANSACTION
+            - COLLABORATION
+            - CHARGEBACK
+            - VALID_ACTIONS
+            - ADJUSTMENT
+            - REPRESENTMENT
+            - CASE_FILING
+      example: "TRANSACTION,COLLABORATION,CHARGEBACK,ADJUSTMENT,REPRESENTMENT,VALID_ACTIONS,CASE_FILING"
+    ClaimUnmaskedResponseDataParameter:
+      name: unmasked_response_data
+      in: query
+      description:
+        Determines if sensitive data will be returned in clear text via the response. Set to TRUE
+        to receive unmasked sensitive data.
+      required: false
+      schema:
+        type: boolean
+        default: false
+      example: false
+    OffsetParameter:
+      name: offset
+      in: query
+      description: Specifies the number of items to offset the start of the list.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        maximum: 100000
+        minimum: 0
+        default: 0
+      example: 5
+    LimitParameter:
+      name: limit
+      in: query
+      description: Number of items the list should be limited to.
+      required: false
+      schema:
+        type: integer
+        format: int32
+        maximum: 100
+        minimum: 1
+        default: 25
+      example: 25
+    ReportRequestIdParameter:
+      name: report_request_id
+      in: path
+      description:
+        Identifier assigned by Mastercom when a report request is created, obtained from the ```POST /reports```
+        endpoint.
+      required: true
+      schema:
+        maxLength: 50
+        minLength: 1
+        type: string
+      example: "RR-00-1000"
+    ReportIdParameter:
+      name: report_completed_id
+      in: path
+      description: |
+        Identifier assigned by Mastercom to a report once it has finished generating and is ready to be retrieved, obtained from the ```GET /reports/{report_request_id}/status``` endpoint.
+      required: true
+      schema:
+        maxLength: 38
+        minLength: 1
+        type: string
+      example: "RF-00-100000"
+    ReportDefinitionIdParameter:
+      name: report_definition_id
+      in: path
+      description: |
+        Identifier assigned by Mastercom to a report definition, obtained from the ```GET /report-definitions``` endpoint.
+      required: true
+      schema:
+        maxLength: 50
+        minLength: 1
+        type: string
+      example: "RD-00-1000"
+    QueueIdParameter:
+      name: queue_id
+      in: path
+      description: |
+        Identifier assigned by Mastercom to the queue, obtained from the ```GET /queues``` endpoint.
+      required: true
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 5
+      example: "1"
+    StartDateTimeParameter:
+      name: start_date_time
+      in: query
+      description: Beginning of search date and time range.
+      required: true
+      schema:
+        format: date-time
+        type: string
+      example: "2023-06-15T16:54:13.546Z"
+    EndDateTimeParameter:
+      name: end_date_time
+      in: query
+      description: Search date maximum range.
+      required: true
+      schema:
+        format: date-time
+        type: string
+      example: "2023-06-15T16:54:13.546Z"
+    EventIdParameter:
+      name: event_id
+      in: path
+      description:
+        Identifier assigned by Mastercom to the dispute event, obtained from the endpoint used to
+        create the dispute event.
+      required: true
+      schema:
+        type: string
+        description:
+          Identifier assigned by Mastercom to the dispute event, obtained from the endpoint used to
+          create the dispute event.
+        minLength: 1
+        maxLength: 20
+      example: "800000078461"
+    EventIdsParameter:
+      name: event_ids
+      in: query
+      description:
+        Identifier assigned by Mastercom to the dispute event, obtained from the endpoint used to create the
+        dispute event. A minimum of 1 and a maximum of 10 event_ids can be sent per request.
+      required: true
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+      example: "800000084386"
+    ArbitrationCaseTypeParameter:
+      name: arbitration_case_type
+      in: query
+      description: |
+        Determines the type of case being created.
+
+        *Available values:* PRE_ARBITRATION, ARBITRATION
+      required: true
+      schema:
+        type: string
+        enum:
+          - PRE_ARBITRATION
+          - ARBITRATION
+      example: "ARBITRATION"
+    ComplianceCaseTypeParameter:
+      name: compliance_case_type
+      in: query
+      description: |
+        Determines the type of case being created.
+
+        *Available values:* PRE_COMPLIANCE, COMPLIANCE
+      required: true
+      schema:
+        type: string
+        enum:
+          - PRE_COMPLIANCE
+          - COMPLIANCE
+      example: "COMPLIANCE"
+    CaseIdParameter:
+      name: case_id
+      in: path
+      description: |
+        Identifier assigned by Mastercom to the case, obtained from either the ```POST /cases/arbitrations``` or ```POST /cases/compliances``` endpoints.
+
+        *Valid Values/Format:* Numeric.
+      required: true
+      schema:
+        minLength: 1
+        maxLength: 19
+        type: string
+      example: "5415063"
+    CaseIdsParameter:
+      name: case_ids
+      in: query
+      description: |
+        List of caseIds (identifier assigned by Mastercom to the case, obtained from the ```POST /cases/arbitrations``` or ```POST /cases/compliances``` endpoints).
+      required: true
+      schema:
+        type: array
+        minItems: 1
+        maxItems: 10
+        items:
+          type: string
+      example: "5415063,5415085"
+    DownloadFormatParameter:
+      name: download_format
+      in: query
+      description: |
+        Desired format of the documents.
+
+        *Available values:* ORIGINAL, MERGED_TIFF, MERGED_PDF
+      required: true
+      schema:
+        type: string
+        enum:
+          - ORIGINAL
+          - MERGED_TIFF
+          - MERGED_PDF
+      example: "ORIGINAL"
+  schemas:
+    ArbitrationCaseCreate:
+      type: object
+      required:
+        - claimId
+        - caseDisputeAmount
+        - memo
+      properties:
+        claimId:
+          $ref: "#/components/schemas/ClaimId"
+        groupId:
+          type: string
+          minLength: 1
+          maxLength: 15
+          description: Identifier assigned by Mastercom to a group of associated events, obtained from the ```GET /claims/{claim_id}``` endpoint.
+          example: "800111234123"
+        documentUploadedId:
+          $ref: "#/components/schemas/DocumentUploadedId"
+        customerFilingNumber:
+          $ref: "#/components/schemas/CustomerFilingNumber"
+        caseDisputeAmount:
+          $ref: "#/components/schemas/CaseDisputeAmount"
+        memo:
+          type: string
+          minLength: 1
+          maxLength: 13000
+          description: |
+            Additional information or note may be entered in this field. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+
+            *Valid Values/Format:* Alpha, numeric, and special characters.
+          example: "memo text"
+    ClaimId:
+      type: string
+      minLength: 1
+      maxLength: 20
+      description: |
+        Identifier assigned by Mastercom Claims Manager or Mastercom Extended to the claim.  Mastercom Extended claimId can be obtained from the ```POST /claims/searches``` endpoint.
+      example: "713992756751"
+    ClaimIdProperty:
+      type: string
+      description: |
+        Identifier assigned by Mastercom to the claim, obtained from the ```POST /claims/searches``` endpoint.
+      example: "7012353455"
+    GroupId:
+      type: string
+      description: Identifier assigned by Mastercom to a group of associated events.
+      example: "800111234123"
+    DocumentMemo:
+      type: string
+      minLength: 1
+      maxLength: 100
+      description: |
+        Additional information or note about the documentation. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+
+        *Valid Values/Format:* Alpha, numeric, and special characters.
+
+      example: "Cardholder letter."
+    CaseId:
+      type: string
+      description: Identifier assigned by Mastercom to the case.
+      example: "5415063"
+    DocumentStatus:
+      type: string
+      description: The status of document processing.
+      example: "PENDING"
+    FileContent:
+      type: string
+      description: File converted to a base64 encoded string.
+      example: "This is a file stored in a base64 encoded string"
+    CaseStatus:
+      type: string
+      description: |
+        Current status of the case.
+        *Valid Values:* OPEN, CLOSE
+      example: "OPEN"
+    AcceptorName:
+      type: string
+      description: The name of the acceptor that should be recognizable by the cardholder and may include other descriptors, such as a store number.
+      example: "Amazon"
+    ViolationDate:
+      type: string
+      format: date
+      description: Date of the compliance violation.
+      example: "2023-01-31"
+    ControlNumber:
+      type: string
+      description: |
+        Field used by issuers, acquirers, and Mastercard to identify the specific transaction for internal
+        auditing and tracing purposes.
+
+        *Valid Values/Format:* Numeric
+      minLength: 5
+      maxLength: 5
+      example: "99999"
+    ControlNumberProperty:
+      type: string
+      description: Field used by issuers, acquirers, and Mastercard to identify the specific transaction for internal auditing and tracing purposes.
+      example: "99999"
+    EventId:
+      type: string
+      description: Identifier assigned by Mastercom to the dispute event.
+      example: "814345676342"
+    EventIdProperty:
+      type: string
+      description: Identifier assigned by Mastercom to the dispute event, obtained from the endpoint used to create the dispute event.
+      example: "800111234"
+    EventTypeChargeback:
+      type: string
+      description: Identifies the type of dispute event.
+      example: "CHARGEBACK"
+    EventTypeChargebackReversal:
+      type: string
+      description: Identifies the type of dispute event.
+      example: "CHARGEBACK REVERSAL"
+    EventTypeInitiation:
+      type: string
+      description: Identifies the type of dispute event.
+      example: "INITIATION"
+    EventTypeAdjustment:
+      type: string
+      description: Identifies the type of dispute event.
+      example: "ADJUSTMENT"
+    EventTypeAdjustmentReversal:
+      type: string
+      description: Identifies the type of dispute event.
+      example: "ADJUSTMENT_REVERSAL"
+    EventTypeRepresentment:
+      type: string
+      description: Identifies the type of dispute event.
+      example: "REPRESENTMENT"
+    EventTypeRepresentmentReversal:
+      type: string
+      description: Identifies the type of dispute event.
+      example: "REPRESENTMENT REVERSAL"
+    CompletedDocumentsAttributes:
+      type: array
+      description: A list of document completed details.
+      items:
+        $ref: "#/components/schemas/CompletedDocumentAttributes"
+    ReportRequestId:
+      type: string
+      description: Identifier assigned by Mastercom when a report request is created.
+      example: "RR-00-1000"
+    ReportDefinitionId:
+      type: string
+      description: Identifier assigned by Mastercom to a report definition.
+      example: "RD-00-1000"
+    ReportDefinitionName:
+      type: string
+      description: Name assigned by Mastercom to a report definition.
+      example: "Debit Issuer Worked Report"
+    RequestCreatedDateTime:
+      type: string
+      description: Date and time the report request was created by Mastercom.
+      example: "2024-01-30T21:56:00.707Z"
+    RequestCompletedDateTime:
+      type: string
+      description: Date and time the report was completed by Mastercom.
+      example: "2024-01-30T21:56:00.707Z"
+    ReportCompletedId:
+      type: string
+      description: Identifier assigned by Mastercom to a report once it has finished generating and is ready to be retrieved.
+      example: "RF-00-100000"
+    ReportCompletedName:
+      type: string
+      description: Name assigned by Mastercom to a report once it has finished generating and is ready to be retrieved.
+      example: "Debit Issuer Worked Report-2024-06-30T21:56:00.707Z"
+    NumberOfItems:
+      type: string
+      description: Number of entries in the report file. A value of 0 means no records were found for given criteria.
+      example: "950"
+    Total:
+      type: integer
+      description: Total number of items in the response.
+      format: int64
+      example: 5000
+    QueueId:
+      type: string
+      description: Identifier assigned by Mastercom to the queue.
+      example: "4"
+    QueueName:
+      type: string
+      description: Name of the queue.
+      example: "Pending Documentation"
+    SortOrder:
+      type: string
+      description: Order by which the items are sorted.
+      example: "ASC"
+    ContextId:
+      type: string
+      description: Unique identifier assigned by Mastercom during transaction search.
+      example: "TXN_88e63f72728c11eaa8e3eeee0afff98n"
+    ContextIdParameter:
+      type: string
+      description: |
+        Unique identifier assigned by Mastercom, obtained from the ```POST /transactions/searches``` endpoint.
+
+        *Valid Values/Format:* Alpha, numeric and special characters
+      minLength: 1
+      maxLength: 50
+      example: "TXN_63cef42e6f7711eaa77feeee0afdc116"
+    ContextType:
+      type: string
+      description: Context type associated to the context ID from the transaction search response.
+      example: "TRANSACTION"
+    PrimaryAccountNumberParameter:
+      type: string
+      description: |
+        Number that is embossed, encoded, or both, on a Mastercard card that identifies the issuer and
+        the particular cardholder account.
+
+        CONDITIONAL: Requires startDate and endDate. Cannot be used with switchSerialNumber.
+
+        *Valid Values/Format:* Numeric
+      minLength: 11
+      maxLength: 19
+      example: "5456456868978964"
+    PrimaryAccountNumber:
+      type: string
+      description:
+        Number that is embossed, encoded, or both, on a Mastercard card that identifies the issuer
+        and the particular cardholder account.
+      example: "5488888888887192"
+    SwitchSerialNumber:
+      type: string
+      description: |
+        A unique nine-digit identification number assigned by the Single Message System.
+
+        CONDITIONAL: Requires startDate. Cannot be used with primaryAccountNumber.
+
+        *Valid Values/Format:* Numeric
+      minLength: 9
+      maxLength: 9
+      example: "242025095"
+    SwitchSerialNumberProperty:
+      type: string
+      description: A unique nine-digit identification number assigned by the Single Message System.
+      example: "242025095"
+    TokenizedPrimaryAccountNumber:
+      type: string
+      description: A series of digits used to identify a customer account or relationship.
+      example: "4312915487625131"
+    AcquirerReferenceNumber:
+      type: string
+      description:
+        A number assigned by the acquirer and used to identify the original financial detail transaction
+        at the time of clearing; provided throughout the lifecycle of a transaction.
+      example: "51310541655698741481459"
+    TransactionDateTime:
+      type: string
+      description: The local month, day, and time on which the transaction takes place at the point of service.
+      example: "2024-01-10T16:44:13.546Z"
+    ClaimCreationDateTime:
+      type: string
+      description: Date and time the claim was created in Mastercom.
+      example: "2024-01-21T16:54:13.546Z"
+    FinancialNetworkCode:
+      type: string
+      description: Financial bank card product associated with the transaction.
+      example: "MS"
+    CardAcceptorType:
+      type: string
+      description:
+        Four-digit indicator used to classify a merchantâ€™s product or service, selected from a
+        standard list of classification codes referred to as acceptor business codes (MCCs).
+      example: "4829"
+    ProcessingCode:
+      type: string
+      description: Series of digits used to describe the specific transaction being performed.
+      example: "000000"
+    ResponseCode:
+      type: string
+      description: A code that defines the disposition (approval or denial) of a transaction.
+      example: "00"
+    SettlementDate:
+      type: string
+      description: Date on which funds are committed for settlement between an acquirer and issuer.
+      example: "2023-08-16"
+    EventReferenceId:
+      type: string
+      description: Identifier assigned by Mastercom to the previous event in the dispute life cycle.
+      example: "813214569875"
+    CreationDate:
+      type: string
+      description: Date and time the system created the event in Mastercom.
+      example: "2023-05-21"
+    OwnerUserId:
+      type: string
+      description: User ID that opened the claim.
+      example: "s999999"
+    EventLastModifiedBy:
+      type: string
+      description: The userID that submitted the last event.
+      example: "s999999"
+    LastUpdatedDateTime:
+      type: string
+      description: Date and time that the event was last updated.
+      example: "2023-05-21T16:54:13.546Z"
+    DocumentIndicator:
+      type: string
+      description: Indicates if a document is associated with the event.
+      example: "true"
+    ClearingStatus:
+      type: string
+      description: Clearing status of the dispute event.
+      example: "CLEARED"
+    RejectCode:
+      type: string
+      description: Code associated with the reason that the system rejected a dispute event.
+      example: "2802"
+    RejectReason:
+      type: string
+      description: Reason that the system rejected a dispute event.
+      example: "FNS COUNTER EXCEEDED"
+    IssuerSettlementAmountIndicator:
+      type: string
+      description: Indicates if the transaction is a debit or credit to the issuer.
+      example: "CR"
+    AcquirerSettlementAmountIndicator:
+      type: string
+      description: Indicates if the transaction is a debit or credit to the acquirer.
+      example: "DB"
+    AdditionalInformation:
+      type: string
+      description: Any additional information or note may be entered in this field. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+      example: "MULTIPLE AUTH REQUESTS"
+    AdditionalInformationParameter:
+      type: string
+
+      description: |
+        Any additional information or note may be entered in this field. Credentials, card numbers, and
+        similar sensitive information such as PCI or PII data should never be entered in this field.
+
+        *Valid Values/Format:* Alpha, numeric, and special characters
+      minLength: 1
+      maxLength: 38
+      example: "MULTIPLE AUTH REQUESTS"
+    CreditPostedAsPurchase:
+      type: boolean
+      default: false
+      description: |
+        Only applicable to reason codes 60 and 75. Doubles the amount of the chargeback if set to True.
+        Used for scenarios in which the merchant attempted to credit a cardholder but accidentally debited the cardholder a second time.
+      example: false
+    SystemsTraceAuditNumber:
+      type: string
+      description: Unique identifier assigned to each transaction by the originator of the message.
+      example: "999999"
+    InterchangeRateIndicator:
+      type: string
+      description:
+        Identifies the transaction as domestic (within the U.S. region) and international (Canada, Asia Pacific,
+        Europe, Latin America/Caribbean and Middle East/Africa), or intra-country (within a country where an intracurrency
+        transaction agreement is in effect).
+      example: "2"
+    DocumentUploadedId:
+      type: string
+      description: |
+        Identifier assigned by Mastercom to a document which is pending processing, obtained from the ```POST /documents``` endpoint.
+      minLength: 1
+      maxLength: 50
+      example: "e59c3a2a9f4311ee8855eeee0afc63f1"
+    CustomerFilingNumber:
+      type: string
+      minLength: 1
+      maxLength: 15
+      description: |
+        Field used by customers to identify the specific case for internal auditing and tracing purposes.
+
+        *Valid Values/Format:* Alpha, numeric, and special characters.
+      example: "2342134"
+    CaseDisputeAmount:
+      type: string
+      minLength: 1
+      maxLength: 12
+      description: |
+        Amount disputed in the case, written without a decimal. Includes the exponent.
+
+        *Valid Values/Format:* Numeric.
+      example: "12300"
+    ComplianceCaseCreate:
+      type: object
+      required:
+        - caseDisputeAmount
+        - filingAs
+        - violationCode
+        - violationDate
+        - memo
+      properties:
+        claimId:
+          $ref: "#/components/schemas/ClaimId"
+        documentUploadedId:
+          $ref: "#/components/schemas/DocumentUploadedId"
+        customerFilingNumber:
+          $ref: "#/components/schemas/CustomerFilingNumber"
+        caseDisputeAmount:
+          $ref: "#/components/schemas/CaseDisputeAmount"
+        caseDisputeAmountAlphaCurrencyCode:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: |
+            Alphabetic code defining the currency of the caseDisputeAmount.
+
+            CONDITIONAL: Required if claimId is not provided.  Cannot be used with caseDisputeAmountNumericCurrencyCode.
+
+            *Valid Values/Format:* Uppercase alpha.
+          example: "USD"
+        caseDisputeAmountNumericCurrencyCode:
+          type: string
+          minLength: 3
+          maxLength: 3
+          description: |
+            Numeric code defining the currency of the caseDisputeAmount.
+
+            CONDITIONAL: Required if claimId is not provided.  Cannot be used with caseDisputeAmountAlphaCurrencyCode.
+
+            *Valid Values/Format:* Numeric.
+          example: "840"
+        filingAs:
+          type: string
+          enum:
+            - ISSUER
+            - ACQUIRER
+          description: Identifier (issuer/acquirer) for the party filing the case.
+          example: "ISSUER"
+        filingIca:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: |
+            A unique number used to identify the party filing the case.
+
+            CONDITIONAL: Required if claimId is not provided.
+
+            *Valid Values/Format:* Numeric.
+
+          example: "001234"
+        filedAgainstIca:
+          type: string
+          minLength: 1
+          maxLength: 10
+          description: |
+            A unique number used to identify the party the case was filed against.
+
+            *Valid Values/Format:* Numeric.
+
+            CONDITIONAL: Required if claimId is not provided.
+
+          example: "004321"
+        violationCode:
+          type: string
+          enum:
+            - ACQ_STMT_REQUEST
+            - ATM_DCC
+            - CB_EXCEEDS_TIMEFRAME
+            - CHINA_ADJ_RETURN
+            - FEE_COLLECTION
+            - INACCURATE_AUTH
+            - INACCURATE_CLEARING
+            - INTERCHANGE
+            - INV_SUB_FIRST_PRESENT
+            - MATCH
+            - MPQR_MCQR
+            - NON_MC_MAESTRO_CNP
+            - REFUND_CORRECTION
+            - SAME_DAY_PROCESSING
+            - SEND_OI
+            - SEND_RI_PAYMENT
+            - THIRD_PARTY_ALL_OTHER
+            - UNSPENT_GIFT_CARD
+            - ALL_OTHER
+          description: Violation code submitted for the pre-compliance or compliance case.
+          example: "CB_EXCEEDS_TIMEFRAME"
+        violationDate:
+          $ref: "#/components/schemas/ViolationDate"
+        memo:
+          type: string
+          minLength: 1
+          maxLength: 13000
+          description: |
+            Additional information or note may be entered in this field. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+
+            *Valid Values/Format:* Alpha, numeric, and special characters.
+          example: "memo text"
+    CaseTakeActionCompliance:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum:
+            - ACCEPT
+            - ESCALATE
+            - REBUT
+            - REJECT
+            - WITHDRAW
+          description: |
+
+            Action taken by the customer on the case.
+
+              For pre-compliance cases:
+
+              *  Sender actions: ESCALATE, WITHDRAW
+
+              *  Receiver actions: ACCEPT, REJECT
+
+              For compliance cases:
+
+              *  Sender actions: REBUT, WITHDRAW
+
+              *  Receiver actions: ACCEPT, REBUT
+
+          example: "REBUT"
+        rebuttalParty:
+          type: string
+          enum:
+            - SENDER
+            - RECEIVER
+          description: |
+            Identifier of the party rebutting the case.
+
+            CONDITIONAL: This is a required field if the action is REBUT.
+          example: "RECEIVER"
+        documentUploadedId:
+          $ref: "#/components/schemas/DocumentUploadedId"
+        memo:
+          type: string
+          minLength: 1
+          maxLength: 13000
+          description: |
+            Additional information or note may be entered in this field. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+
+            CONDITIONAL: Required if the action is ACCEPT, REJECT or REBUT.
+
+            *Valid Values/Format:* Alpha, numeric, and special characters.
+
+          example: "We disagree, see documentation for details."
+    CaseTakeActionArbitration:
+      type: object
+      required:
+        - action
+      properties:
+        action:
+          type: string
+          enum:
+            - ACCEPT
+            - ESCALATE
+            - REJECT
+            - WITHDRAW
+          description: |
+
+            Action taken by the customer on the case.
+
+              For pre-arbitration cases:
+
+              *  Sender (issuer) actions: ESCALATE, WITHDRAW
+
+              *  Receiver (acquirer) actions: ACCEPT, REJECT
+
+              For arbitration cases:
+
+              *  Sender (issuer) actions: WITHDRAW
+
+              *  Receiver (acquirer) actions: ACCEPT
+
+          example: "ACCEPT"
+        documentUploadedId:
+          $ref: "#/components/schemas/DocumentUploadedId"
+        memo:
+          type: string
+          minLength: 1
+          maxLength: 13000
+          description: |
+            Additional information or note may be entered in this field. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+
+            CONDITIONAL: Required if the action is ACCEPT, REJECT.
+
+            *Valid Values/Format:* Alpha, numeric, and special characters.
+
+          example: "We disagree, see documentation for details."
+    CaseTakeActionDocumentRetry:
+      type: object
+      required:
+        - documentUploadedId
+      properties:
+        rebuttalParty:
+          type: string
+          enum:
+            - SENDER
+            - RECEIVER
+          description: |
+            Identifier of the party resubmitting the REBUT documentation.
+
+            CONDITIONAL: Required when document failed to process during rebuttal.
+
+          example: "SENDER"
+        documentUploadedId:
+          $ref: "#/components/schemas/DocumentUploadedId"
+        documentMemo:
+          $ref: "#/components/schemas/DocumentMemo"
+    CaseCreateCaseId:
+      type: object
+      properties:
+        caseId:
+          $ref: "#/components/schemas/CaseId"
+    CasesDocumentAttributes:
+      properties:
+        caseDocumentAttributes:
+          description: A list of caseIds and their respective document status.
+          type: array
+          items:
+            $ref: "#/components/schemas/CaseDocumentAttributes"
+    CaseDocumentAttributes:
+      type: object
+      properties:
+        caseId:
+          $ref: "#/components/schemas/CaseId"
+        documentStatus:
+          type: string
+          description: |
+            The status of document processing.
+
+            When a document has not been attached by the sender or receiver, this parameter returns the following value: UNAVAILABLE.
+
+            When documentation is attached by the sender or receiver, valid responses are in the following concatenated format: status_party_processDate_REBUT.
+
+              *  *status* is COMPLETED, PENDING, FAILED, UNAVAILABLE.
+
+              *  *party* is either SND for a document from the sender or REC for a document from the receiver.
+
+              *  *processDate* is in the format MM/DD/YYYY HH:MM:SS AM/PM.
+
+              *  *REBUT* is suffixed to the end when the case is rebutted.
+
+            For example 'COMPLETED_SND_2/10/2021 8:43:21 AM' represents a document from the sender. The document has completed processing on 10 February 2021 at 8:43:21 AM. There is no rebuttal for the case.
+
+          example: "COMPLETED_SND_2/10/2021 8:43:21 AM"
+    DocumentRetrieve:
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: File name of the document.
+          example: "CustomerLetter.pdf"
+        file:
+          $ref: "#/components/schemas/FileContent"
+    CaseDetails:
+      type: object
+      description: Details from an existing case.
+      properties:
+        caseStatus:
+          $ref: "#/components/schemas/CaseStatus"
+        caseType:
+          type: string
+          description: Identifer used to specify if the case is a pre-arbitration, arbitration, pre-compliance, or compliance case.
+          example: "ARBITRATION"
+        customerFilingNumber:
+          type: string
+          description: Field used by customers to identify the specific case for internal auditing and tracing purposes.
+          example: "5482"
+        reasonCode:
+          type: string
+          description: Reason code submitted for the pre-arbitration or arbitration case.
+          example: "70"
+        caseDisputeAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        filingAs:
+          type: string
+          description: Identifier (issuer or acquirer) for the party filing the case.
+          example: "ISSUER"
+        filingIca:
+          type: string
+          description: A unique number used to identify the party filing the case.
+          example: "001234"
+        filedAgainstIca:
+          type: string
+          description: A unique number used to identify the party the case was filed against.
+          example: "004321"
+        acceptorName:
+          $ref: "#/components/schemas/AcceptorName"
+        violationCode:
+          type: string
+          description: Violation code submitted for the pre-compliance or compliance case.
+          example: "CB_EXCEEDS_TIMEFRAME"
+        violationDate:
+          $ref: "#/components/schemas/ViolationDate"
+        rulingDate:
+          type: string
+          description: Date of the ruling by Mastercard Dispute Resolution Management.
+          example: "2023-03-18"
+        rulingStatus:
+          type: string
+          description: Status of the ruling from Mastercard Dispute Resolution Management. Valid values are Reviewed, Filed In Error, Declined, Expired, Favor Sender, Favor Receiver.
+          example: "Declined"
+        claimId:
+          $ref: "#/components/schemas/ClaimIdProperty"
+        claimsManagerClaimId:
+          type: string
+          description: The identifier assigned by Mastercom Claims Manager to the claim.
+          example: "200000001234"
+        caseActionHistories:
+          description: An array of actions taken by the customers on the case.
+          type: array
+          items:
+            $ref: "#/components/schemas/CaseActionHistory"
+    CaseActionHistory:
+      description: An array of actions taken by customers on the case.
+      type: object
+      properties:
+        action:
+          type: string
+          description: Action applied to the case.
+          example: "ACCEPT"
+        actionDate:
+          type: string
+          description: Date the action was applied to the case in Mastercom.
+          example: "2024-02-11"
+        rebuttalParty:
+          type: string
+          description: Identifier of the party (sender or receiver) rebutting the case.
+          example: "RECEIVER"
+        memo:
+          type: string
+          description: Additional information or note submitted by the responding party. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+          example: "Case action memo"
+    ChargebackUpdate:
+      required:
+        - acknowledge
+      type: object
+      properties:
+        acknowledge:
+          type: boolean
+          description:
+            Setting this parameter to true moves the claim to the Worked queue. Issuers may take further
+            actions on acknowledged claims.
+          example: true
+    Documents:
+      type: object
+      required:
+        - documentUploadedId
+      properties:
+        documentMemo:
+          $ref: "#/components/schemas/DocumentMemo"
+        documentUploadedId:
+          $ref: "#/components/schemas/DocumentUploadedId"
+    InitiateDispute:
+      type: object
+      required:
+        - disputeAmount
+        - reasonCode
+      properties:
+        autoChargeback:
+          type: boolean
+          default: true
+          description: |
+            When set to True, system creates a chargeback automatically when Collaboration is unsuccessful.
+            When set to False, system takes no further action if Collaboration is unsuccessful.
+
+            NOTE: Parameter must be set to True at this time.
+          example: true
+        creditPostedAsPurchase:
+          $ref: "#/components/schemas/CreditPostedAsPurchase"
+        disputeAmount:
+          type: string
+          description: |
+            Amount disputed, written without a decimal. Includes the exponent.
+
+            *Valid Values/Format:* Numeric
+          minLength: 1
+          maxLength: 12
+          example: "100000"
+        reasonCode:
+          type: string
+          description: |
+            Reason code submitted for the chargeback.
+
+            *Valid Values/Format:* Numeric
+          minLength: 2
+          maxLength: 2
+          example: "70"
+        documentIndicator:
+          type: boolean
+          default: false
+          description: |
+            Specify TRUE if documentation is being attached or will be attached at a later time for this event.
+            Otherwise, specify FALSE.
+          example: true
+        documentMemo:
+          $ref: "#/components/schemas/DocumentMemo"
+        documentUploadedId:
+          $ref: "#/components/schemas/DocumentUploadedId"
+        expirationDate:
+          type: string
+          description: |
+            Card expiration date.
+
+            *Valid Values/Format:* Numeric (YYMM)
+          minLength: 4
+          maxLength: 4
+          example: "2301"
+        additionalInformation:
+          $ref: "#/components/schemas/AdditionalInformationParameter"
+        singleMessage:
+          $ref: "#/components/schemas/ChargebackSingleMessage"
+    RepresentmentSingleMessage:
+      type: object
+      properties:
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumber"
+    RepresentmentSingleMessageReversal:
+      type: object
+      properties:
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumber"
+    ChargebackSingleMessageReversal:
+      type: object
+      properties:
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumber"
+    ChargebackSingleMessage:
+      type: object
+      properties:
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumber"
+        noShowReason:
+          type: string
+          enum:
+            - RS_3_ATM_DISPUTE
+            - RS_5_GUARANTEED_RESERVATION_SERVICE
+            - RS_7_ADDENDUM_DISPUTE
+          description: The No Show Reason associated to the chargeback. This field is mandatory when the Reason Code is 59.
+          example: "RS_5_GUARANTEED_RESERVATION_SERVICE"
+        noShowCode:
+          type: string
+          enum:
+            - NS_1_CARDHOLDER_CANCELED_RESERVATION_HAS_VALID_CANCELLATION_NUMBER
+            - NS_2_CARDHOLDER_CANCELED_RESERVATION_NO_VALID_CANCELLATION_NUMBER
+            - NS_3_CARDHOLDER_USED_THE_ACCOMMODATIONS
+            - NS_4_CARD_ACCEPTOR_PROVIDED_ALTERNATE_ACCOMMODATIONS
+            - NS_5_NO_SHOW_CHARGE_DIFFERED_FROM_QUOTED_RATE
+            - NS_6_CARD_ACCEPTOR_DID_NOT_ADVISE_OF_FEE_CHARGE
+          description: The No Show Code associated to the chargeback.  This field is mandatory when Reason Code 59 and noShowReason is RS_5_GUARANTEED_RESERVATION_SERVICE.
+          example: "NS_1_CARDHOLDER_CANCELED_RESERVATION_HAS_VALID_CANCELLATION_NUMBER"
+        program:
+          type: string
+          description: |
+            Type of card program with the account number. This field is mandatory when the Reason Code is 49.
+
+            *Valid Values/Format:* Uppercase Alpha
+          minLength: 4
+          maxLength: 5
+          example: "QMAP"
+        securityBulletinNumber:
+          description: |
+            The three-digit Global Security Bulletin number. This field is mandatory when the brand is MD and the reason code is 49.
+            Format is YMM. (For example, the format of the bulletin number of 6 June 2008 would be entered as 806).
+
+            *Valid Values/Format:* Numeric (YMM)
+          type: string
+          minLength: 3
+          maxLength: 3
+          example: "806"
+        cancelNumber:
+          type: string
+          description: |
+            Cancellation number of the reservation. This field is mandatory when Reason Code 59 and No Show Code = 1.
+
+            *Valid Values/Format:* Uppercase alphanumeric
+          minLength: 1
+          maxLength: 17
+          example: "CANCEL854689532"
+    DisputesCreateEventId:
+      type: object
+      properties:
+        eventId:
+          $ref: "#/components/schemas/EventId"
+        eventType:
+          $ref: "#/components/schemas/EventTypeChargeback"
+    DocumentUpload:
+      type: object
+      properties:
+        documentUploadedId:
+          type: string
+          description: Identifier assigned by Mastercom to a document which is pending processing.
+          example: "e59c3a2a9f4311ee8855eeee0afc63f1"
+    DocumentAttributesList:
+      type: object
+      properties:
+        documentAttributes:
+          type: array
+          description: A list of eventIds and their respective document attributes.
+          items:
+            $ref: "#/components/schemas/DocumentAttributes"
+    DocumentAttributes:
+      type: object
+      properties:
+        eventId:
+          $ref: "#/components/schemas/EventId"
+        claimId:
+          $ref: "#/components/schemas/ClaimIdProperty"
+        documentStatus:
+          $ref: "#/components/schemas/DocumentStatus"
+        completedDocumentsAttributes:
+          $ref: "#/components/schemas/CompletedDocumentsAttributes"
+    ErrorWrapper:
+      description: A top level object for errors
+      type: object
+      required:
+        - Errors
+      properties:
+        Errors:
+          $ref: "#/components/schemas/Errors"
+    Errors:
+      description: Object that contains the list of errors
+      type: object
+      required:
+        - Error
+      properties:
+        Error:
+          $ref: "#/components/schemas/ErrorList"
+    ErrorList:
+      description: The list of errors
+      type: array
+      minItems: 1
+      items:
+        $ref: "#/components/schemas/Error"
+    Error:
+      description: A single error
+      type: object
+      properties:
+        Source:
+          description: The error source
+          type: string
+          example: "Mastercom Extended"
+        ReasonCode:
+          description: The error reason code
+          type: string
+          example: "INVALID_BODY::210008"
+        Description:
+          description: The error description
+          type: string
+          example: Something failed while parsing the body. Has the body been provided?
+        Recoverable:
+          description: Is the error recoverable
+          type: boolean
+          example: false
+        Details:
+          description: The error details
+          type: string
+          example: Something failed while parsing the body. Has the body been provided?
+    ReportSearch:
+      required:
+        - reportDefinitionIds
+      type: object
+      properties:
+        reportDefinitionIds:
+          type: array
+          minItems: 1
+          maxItems: 10
+          description: |
+            Identifier assigned by Mastercom to a report definition, obtained from the ```GET /report-definitions``` endpoint.
+
+            CONDITIONAL: If reportDefinitionIds is provided, then providing an
+            id in the list is required.
+          example:
+            - RD-00-1000
+          items:
+            type: string
+            description: Identifier assigned by Mastercom to a report definition.
+            minLength: 1
+            maxLength: 50
+            example: "[RD-00-1000]"
+        startDateTime:
+          type: string
+          description: |
+            Beginning of search date and time range.
+
+            CONDITIONAL: Required if using endDate. startDate and endDate must not be greater than 90 days from current date. Search range is a maximum of 30 days.
+          minLength: 10
+          maxLength: 24
+          example: "2024-01-01T12:01:01.888Z"
+        endDateTime:
+          type: string
+          description: |
+            Search date maximum range.
+
+            CONDITIONAL: Required if using startDate. startDate and endDate must not be greater than 90 days from current date. Search range is a maximum of 30 days.
+          minLength: 10
+          maxLength: 24
+          example: "2024-01-29T12:01:01.888Z"
+        reportStatus:
+          type: string
+          enum:
+            - PENDING
+            - PROCESSING
+            - COMPLETED
+            - FAILURE
+          description: Status of the report. After the system completes generating the report, the reportStatus value is COMPLETED. The report is then available.
+          example: "COMPLETED"
+        limit:
+          type: integer
+          description: Number of reportRequest items the list should be limited to.
+          format: int32
+          minimum: 1
+          maximum: 100
+          example: 25
+          default: 25
+        offset:
+          type: integer
+          description: Specifies the number of items to offset the start of the list.
+          format: int32
+          minimum: 0
+          maximum: 100000
+          example: 5
+          default: 0
+        sortKey:
+          type: string
+          enum:
+            - REQUEST_CREATED_DATE_TIME
+            - REQUEST_COMPLETED_DATE_TIME
+          description: Key by which the items are sorted.
+          example: "REQUEST_CREATED_DATE_TIME"
+        sortOrder:
+          type: string
+          enum:
+            - ASC
+            - DESC
+          description: Order by which the items are sorted.
+          example: "ASC"
+    ReportDetails:
+      type: object
+      properties:
+        reportRequestId:
+          $ref: "#/components/schemas/ReportRequestId"
+        reportDefinitionId:
+          $ref: "#/components/schemas/ReportDefinitionId"
+        reportDefinitionName:
+          $ref: "#/components/schemas/ReportDefinitionName"
+        format:
+          type: string
+          description: List of valid report formats.
+          example: "CSV"
+        reportStatus:
+          type: string
+          description: Status of the report. After the system completes generating the report, the reportStatus value is COMPLETED. The report is then available.
+          example: "PENDING"
+        requestCreatedDateTime:
+          $ref: "#/components/schemas/RequestCreatedDateTime"
+        requestCompletedDateTime:
+          $ref: "#/components/schemas/RequestCompletedDateTime"
+        reportCompletedId:
+          $ref: "#/components/schemas/ReportCompletedId"
+        reportCompletedName:
+          $ref: "#/components/schemas/ReportCompletedName"
+        numberOfItems:
+          $ref: "#/components/schemas/NumberOfItems"
+      description: List of report details.
+    ReportFilter:
+      type: object
+      properties:
+        filterName:
+          type: string
+          description: Criteria for filtering results to include in the report.
+          enum:
+            - ICA
+            - PROC_ID
+            - RTN
+          example: "RTN"
+        filterValues:
+          type: array
+          description: Array of values to use for filtering results according to the filter selected in filterName.
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+          example: "[999696, 999744]"
+    ReportList:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Specifies the number of items to offset the start of the list.
+          format: int32
+          example: 5
+        limit:
+          type: integer
+          description: Number of reportRequest items the list should be limited to.
+          format: int32
+          example: 25
+        count:
+          type: integer
+          description: The number of 'reportRequests' items in this batch.
+          format: int32
+          example: 10
+        total:
+          $ref: "#/components/schemas/Total"
+        reportRequests:
+          type: array
+          description: List of report details.
+          items:
+            $ref: "#/components/schemas/ReportDetails"
+    ReportsCreate:
+      required:
+        - format
+        - reportDefinitionId
+      type: object
+      properties:
+        reportDefinitionId:
+          type: string
+          description: |
+            Identifier assigned by Mastercom to a report definition, obtained from the ```GET /report-definitions``` endpoint.
+
+            *Valid Values/Format:* Alphanumeric/Special Char(-)
+          minLength: 1
+          maxLength: 50
+          example: "RD-00-1000"
+        format:
+          type: string
+          enum:
+            - CSV
+          description: List of valid report formats.
+          example: "CSV"
+        startDate:
+          type: string
+          description: |
+            Beginning of search date range.
+
+            CONDITIONAL: Required if using endDate. startDate and endDate must not be greater than 90 days from current date. Search range is a maximum of 30 days.
+          format: date
+          example: "2023-06-23"
+        endDate:
+          type: string
+          description: |
+            Search date maximum range.
+
+            CONDITIONAL: Required if using startDate. startDate and endDate must not be greater than 90 days from current date. Search range is a maximum of 30 days.
+          format: date
+          example: "2023-06-30"
+        filters:
+          type: array
+          minItems: 1
+          maxItems: 4
+          description: Array of filters.
+          items:
+            $ref: "#/components/schemas/ReportFilter"
+    CreatedReportDetails:
+      type: object
+      properties:
+        reportRequestId:
+          $ref: "#/components/schemas/ReportRequestId"
+    QueueClaimData:
+      type: array
+      description: List of queue claim data.
+      items:
+        $ref: "#/components/schemas/QueueFieldNameValue"
+      example:
+        - fieldName: "claimId"
+          fieldValue: "713992756751"
+        - fieldName: "claimStatus"
+          fieldValue: "OPEN"
+        - fieldName: "issuerIca"
+          fieldValue: "001234"
+    QueueDetails:
+      type: object
+      properties:
+        queueId:
+          $ref: "#/components/schemas/QueueId"
+        queueName:
+          $ref: "#/components/schemas/QueueName"
+        count:
+          type: integer
+          description: The number of 'queue' items in this batch.
+          format: int32
+          example: 950
+        offset:
+          type: integer
+          description: Specifies the number of items to offset the start of the list.
+          format: int32
+          example: 5
+        limit:
+          type: integer
+          description: Number of claimsData items the list should be limited to.
+          format: int32
+          example: 25
+        total:
+          $ref: "#/components/schemas/Total"
+        sortKey:
+          type: string
+          description: Key by which the items are sorted.
+          example: "eventExpiryDateTime"
+        sortOrder:
+          $ref: "#/components/schemas/SortOrder"
+    Queue:
+      type: object
+      properties:
+        queue:
+          $ref: "#/components/schemas/QueueDetails"
+        data:
+          type: array
+          description: List of queue data.
+          items:
+            $ref: "#/components/schemas/QueueClaimData"
+    ClaimSearch:
+      required:
+        - startDateTime
+      type: object
+      properties:
+        contextId:
+          $ref: "#/components/schemas/ContextIdParameter"
+        contextType:
+          type: string
+          enum:
+            - TRANSACTION
+          description: |
+            Context type associated to the context ID from the transaction search response.
+
+            CONDITIONAL: Cannot be used in conjunction with switchSerialNumber or primaryAccountNumber.
+          example: "TRANSACTION"
+          default: TRANSACTION
+        primaryAccountNumber:
+          $ref: "#/components/schemas/PrimaryAccountNumberParameter"
+        switchSerialNumber:
+          $ref: "#/components/schemas/SwitchSerialNumber"
+        startDateTime:
+          type: string
+          description: Beginning of search date and time range. For searches using Switch Serial Number, this is the Settlement Date.
+          format: date-time
+          example: "2023-12-15T16:54:13.546Z"
+        endDateTime:
+          type: string
+          description: |
+            Search date maximum range. The search range is a maximum of 30 days and
+            searches can be completed for up to 365 days of history.
+
+
+            CONDITIONAL: Required if using primaryAccountNumber.
+          format: date-time
+          example: "2024-02-15T16:54:13.546Z"
+        limit:
+          type: integer
+          description: Number of claimsData items the list should be limited to.
+          minimum: 1
+          maximum: 100
+          format: int32
+          example: 25
+          default: 25
+        offset:
+          type: integer
+          description: Specifies the number of items to offset the start of the list.
+          minimum: 0
+          maximum: 100000
+          format: int32
+          example: 5
+          default: 0
+    Claim:
+      type: object
+      properties:
+        claimId:
+          $ref: "#/components/schemas/ClaimIdProperty"
+        contextId:
+          $ref: "#/components/schemas/ContextId"
+        contextType:
+          $ref: "#/components/schemas/ContextType"
+        primaryAccountNumberMasked:
+          type: string
+          description:
+            Number that is embossed, encoded, or both, on a Mastercard card that identifies the issuer and
+            the particular cardholder account.
+          example: "545645******8964"
+        tokenizedPrimaryAccountNumber:
+          $ref: "#/components/schemas/TokenizedPrimaryAccountNumber"
+        acquirerReferenceNumber:
+          $ref: "#/components/schemas/AcquirerReferenceNumber"
+        switchSerialNumber:
+          $ref: "#/components/schemas/SwitchSerialNumberProperty"
+        transactionAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        transactionDateTime:
+          $ref: "#/components/schemas/TransactionDateTime"
+        claimCreationDateTime:
+          $ref: "#/components/schemas/ClaimCreationDateTime"
+        claimStatus:
+          type: string
+          description: Contains either the current status of the claim or Claim not found.
+          example: "OPEN"
+    TransactionSearch:
+      required:
+        - startDate
+      type: object
+      properties:
+        primaryAccountNumber:
+          $ref: "#/components/schemas/PrimaryAccountNumberParameter"
+        switchSerialNumber:
+          $ref: "#/components/schemas/SwitchSerialNumber"
+        transactionAmountFrom:
+          type: string
+          description: Lower limit of the transaction amount to be searched. Includes exponent, do not include decimal.
+          minLength: 1
+          maxLength: 12
+          example: "5000"
+        transactionAmountTo:
+          type: string
+          description: Upper limit of the transaction amount to be searched. Includes exponent, do not include decimal.
+          minLength: 1
+          maxLength: 12
+          example: "15015"
+        startDate:
+          type: string
+          format: date
+          description: Beginning of search date range. For searches using Switch Serial Number, this is the Settlement Date.
+          example: "2024-01-05"
+        endDate:
+          type: string
+          format: date
+          description: |
+            Search date maximum range. The search range is a maximum of 30 days and searches can be completed for up to 120 days of history.
+
+            CONDITIONAL: Required if using primaryAccountNumber.
+          example: "2024-02-28"
+    TransactionData:
+      type: object
+      properties:
+        singleMessages:
+          type: array
+          description: Aggregated single list of all Single Message components of the transaction search results.
+          items:
+            $ref: "#/components/schemas/TransactionSingleMessage"
+      description: Root element for a list of transaction details.
+    TransactionSingleMessage:
+      type: object
+      properties:
+        contextId:
+          $ref: "#/components/schemas/ContextId"
+        contextType:
+          $ref: "#/components/schemas/ContextType"
+        claimId:
+          $ref: "#/components/schemas/ClaimIdProperty"
+        authorization:
+          $ref: "#/components/schemas/SingleMessageSummary"
+        clearing:
+          $ref: "#/components/schemas/SingleMessageSummary"
+    SingleMessageSummary:
+      type: object
+      properties:
+        acquirerReferenceNumber:
+          $ref: "#/components/schemas/AcquirerReferenceNumber"
+        financialNetworkCode:
+          $ref: "#/components/schemas/FinancialNetworkCode"
+        transactionAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        acceptorName:
+          $ref: "#/components/schemas/AcceptorName"
+        cardAcceptorType:
+          $ref: "#/components/schemas/CardAcceptorType"
+        primaryAccountNumber:
+          $ref: "#/components/schemas/PrimaryAccountNumber"
+        tokenizedPrimaryAccountNumber:
+          $ref: "#/components/schemas/TokenizedPrimaryAccountNumber"
+        processingCode:
+          $ref: "#/components/schemas/ProcessingCode"
+        responseCode:
+          $ref: "#/components/schemas/ResponseCode"
+        settlementDate:
+          $ref: "#/components/schemas/SettlementDate"
+        switchSerialNumber:
+          $ref: "#/components/schemas/SwitchSerialNumberProperty"
+        transmissionDateTime:
+          type: string
+          description: Date and time a message was transmitted by a switch, to be expressed in Coordinated Universal Time (UTC).
+          example: "2023-05-10T16:44:13.546Z"
+        systemsTraceAuditNumber:
+          $ref: "#/components/schemas/SystemsTraceAuditNumber"
+        interchangeRateIndicator:
+          $ref: "#/components/schemas/InterchangeRateIndicator"
+    TransactionList:
+      type: object
+      properties:
+        transactionsData:
+          $ref: "#/components/schemas/TransactionData"
+    ClaimsList:
+      type: object
+      properties:
+        claimsData:
+          type: array
+          description: List of claim data.
+          items:
+            $ref: "#/components/schemas/Claim"
+        count:
+          type: integer
+          description: The number of 'claimsData' items in this batch.
+          format: int32
+          example: 950
+        offset:
+          type: integer
+          description: Specifies the number of items to offset the start of the list.
+          format: int32
+          example: 5
+        limit:
+          type: integer
+          description: Number of claimsData items the list should be limited to.
+          format: int32
+          example: 25
+        total:
+          $ref: "#/components/schemas/Total"
+    ReportsStatus:
+      type: object
+      properties:
+        reportDefinitionId:
+          $ref: "#/components/schemas/ReportDefinitionId"
+        reportDefinitionName:
+          $ref: "#/components/schemas/ReportDefinitionName"
+        format:
+          type: string
+          description: List of valid report formats.
+          example: "CSV"
+        reportStatus:
+          type: string
+          description:
+            Status of the report. After the system completes generating the report, the reportStatus value is
+            COMPLETED. The report is then available.
+          example: "COMPLETED"
+        requestCreatedDateTime:
+          $ref: "#/components/schemas/RequestCreatedDateTime"
+        requestCompletedDateTime:
+          $ref: "#/components/schemas/RequestCompletedDateTime"
+        reportCompletedId:
+          $ref: "#/components/schemas/ReportCompletedId"
+        reportCompletedName:
+          $ref: "#/components/schemas/ReportCompletedName"
+        numberOfItems:
+          $ref: "#/components/schemas/NumberOfItems"
+    Document:
+      type: object
+      required:
+        - fileName
+        - file
+      properties:
+        fileName:
+          type: string
+          description: File name of the document.
+          example: "document1.extension"
+          minLength: 5
+          maxLength: 21
+        file:
+          $ref: "#/components/schemas/FileContent"
+    Report:
+      type: object
+      properties:
+        document:
+          $ref: "#/components/schemas/Document"
+        reportCompletedId:
+          $ref: "#/components/schemas/ReportCompletedId"
+    ReportDefinitionCriteria:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: The display name of the associated criteria name.
+          example: "Start Date"
+        fieldDataType:
+          type: string
+          description: Data type of the associated criteria name.
+          example: "DATE"
+        required:
+          type: boolean
+          description: Indicator for whether a particular request criteria is required.
+          example: true
+      description: List of criteria.
+    ReportDefinition:
+      type: object
+      properties:
+        reportDefinitionId:
+          $ref: "#/components/schemas/ReportDefinitionId"
+        description:
+          type: string
+          description: Description of report.
+          example: "Debit Issuer Worked Report"
+        reportName:
+          type: string
+          description: Name assigned by Mastercom to a report.
+          example: "Debit Issuer Worked Report"
+        criteria:
+          type: array
+          description: List of criteria.
+          items:
+            $ref: "#/components/schemas/ReportDefinitionCriteria"
+          example:
+            - fieldName: Start Date
+              fieldDataType: DATE
+              required: true
+        formats:
+          type: array
+          description: List of valid report formats.
+          example:
+            - CSV
+          items:
+            type: string
+            description: List of valid document formats.
+            example: "[CSV]"
+    ReportDefinitionList:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int32
+          description: Specifies the number of items to offset the start of the list.
+          example: 5
+        limit:
+          type: integer
+          format: int32
+          description: Number of reportDefinition items the list should be limited to.
+          example: 25
+        count:
+          type: integer
+          format: int32
+          description: The number of 'reportDefinitions' items in this batch.
+          example: 950
+        total:
+          $ref: "#/components/schemas/Total"
+        reportDefinitions:
+          type: array
+          description: List of report definitions.
+          items:
+            $ref: "#/components/schemas/ReportDefinition"
+    QueueDefinition:
+      type: object
+      properties:
+        queueId:
+          $ref: "#/components/schemas/QueueId"
+        queueName:
+          $ref: "#/components/schemas/QueueName"
+        description:
+          type: string
+          description: Description of queue.
+          example: "Pending Documentation"
+        queueType:
+          type: string
+          description: Type of queue.
+          example: "STANDARD"
+        sortKey:
+          type: string
+          description: Field by which the items are sorted.
+          example: "eventExpiryDateTime"
+        sortOrder:
+          $ref: "#/components/schemas/SortOrder"
+        fields:
+          type: array
+          description: The list of fields that can be fetched from this queue.
+          items:
+            $ref: "#/components/schemas/QueueField"
+      description: List of queue definitions.
+    QueueField:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: Field name in queue.
+          example: "claimId"
+        fieldDataType:
+          type: string
+          description: Data type of the associated field name.
+          example: "STRING"
+      description: A field that can be fetched from this queue.
+    QueueFieldNameValue:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: Field name in queue.
+          example: "claimId"
+        fieldValue:
+          type: string
+          description: Field value of the associated field name.
+          example: "713992756751"
+      description: A field and it's associated value from this queue.
+    QueueDefinitionsList:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: The number of 'definitions' items in this batch.
+          format: int32
+          example: 10
+        offset:
+          type: integer
+          description: Specifies the number of items to offset the start of the list.
+          format: int32
+          example: 5
+        limit:
+          type: integer
+          description: Number of queueDefinition items the list should be limited to.
+          format: int32
+          example: 25
+        total:
+          $ref: "#/components/schemas/Total"
+        definitions:
+          type: array
+          description: List of queue definitions.
+          items:
+            $ref: "#/components/schemas/QueueDefinition"
+    ClaimCollaborationDetails:
+      type: object
+      properties:
+        collaborationAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        reasonCode:
+          type: string
+          description: Collaboration reason code. Not currently used.
+          example: "70"
+        memo:
+          type: string
+          description: Any additional information or note may be entered in this field. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+          example: "Memo with details, no PII."
+        responseCode:
+          type: string
+          description: Collaboration response from the acquirer. Valid options are A (Funds movement request), B (Refunded outside Mastercom), C (Initiating refund), D (Reject collaboration).
+          example: "C"
+        eventReferenceId:
+          $ref: "#/components/schemas/EventReferenceId"
+        eventId:
+          $ref: "#/components/schemas/EventIdProperty"
+        groupId:
+          $ref: "#/components/schemas/GroupId"
+        eventType:
+          $ref: "#/components/schemas/EventTypeInitiation"
+        eventStatus:
+          type: string
+          description: Specifies whether the Collaboration event is submitted or completed.
+          example: "COMPLETED"
+        creationDate:
+          $ref: "#/components/schemas/CreationDate"
+        eventExpiryDateTime:
+          type: string
+          description: Date and time that the collaboration event expires.
+          example: "2023-05-21T16:54:13.546Z"
+        ownerUserId:
+          $ref: "#/components/schemas/OwnerUserId"
+        refundReversalType:
+          type: string
+          description: Valid refund reversal types are REFUND or CREDIT VOUCHER.
+          example: "REFUND"
+        refundReversalAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        refundReversalDateTime:
+          type: string
+          description: Date and time that the refund reversal was submitted.
+          example: "2023-05-21T16:54:13.546Z"
+        refundReversalReferenceId:
+          type: string
+          description: Identifier assigned by Mastercom to the refund reversal.
+          example: "123458111"
+        eventLastModifiedBy:
+          $ref: "#/components/schemas/EventLastModifiedBy"
+        lastUpdatedDateTime:
+          $ref: "#/components/schemas/LastUpdatedDateTime"
+        documentIndicator:
+          $ref: "#/components/schemas/DocumentIndicator"
+        documentStatus:
+          $ref: "#/components/schemas/DocumentStatus"
+        completedDocumentsAttributes:
+          $ref: "#/components/schemas/CompletedDocumentsAttributes"
+      description: Root element for a list of collaboration details.
+    ClaimDetails:
+      type: object
+      properties:
+        claimId:
+          $ref: "#/components/schemas/ClaimIdProperty"
+        claimStatus:
+          type: string
+          description: Current status of the claim.
+          example: "OPEN"
+        contextId:
+          type: string
+          description: Unique identifier assigned by Mastercom during transaction search.
+          example: "TXN_88e63f72728c11eaa8e3eeee0afff98n"
+        contextType:
+          $ref: "#/components/schemas/ContextType"
+        primaryAccountNumber:
+          $ref: "#/components/schemas/PrimaryAccountNumber"
+        tokenizedPrimaryAccountNumber:
+          $ref: "#/components/schemas/TokenizedPrimaryAccountNumber"
+        acquirerReferenceNumber:
+          $ref: "#/components/schemas/AcquirerReferenceNumber"
+        issuerIca:
+          type: string
+          description: A unique number used to identify the issuer in the first presentment.
+          example: "001234"
+        acquirerIca:
+          type: string
+          description: A unique number used to identify the acquirer in the first presentment.
+          example: "004321"
+        transactionAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        totalDisputeAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        ownerUserId:
+          $ref: "#/components/schemas/OwnerUserId"
+        lastUpdatedOwnerUserId:
+          type: string
+          description: The userID that submitted the last event.
+          example: "s999999"
+        claimCreationDateTime:
+          $ref: "#/components/schemas/ClaimCreationDateTime"
+        claimLastUpdatedDateTime:
+          type: string
+          description: The date and time the claim was last updated.
+          example: "2023-06-21T16:54:13.546Z"
+        collaborationDetails:
+          type: array
+          description: Root element for a list of collaboration details.
+          items:
+            $ref: "#/components/schemas/ClaimCollaborationDetails"
+        transactionDetails:
+          type: array
+          description: Root element for a list of transaction details.
+          items:
+            $ref: "#/components/schemas/ClaimTransactionDetails"
+        chargebackDetails:
+          type: array
+          description: Root element for a list of Chargeback details.
+          items:
+            $ref: "#/components/schemas/ChargebackDetails"
+        chargebackReversalDetails:
+          type: array
+          description: Root element for a list of Chargeback reversal details.
+          items:
+            $ref: "#/components/schemas/ChargebackReversalDetails"
+        validActions:
+          type: array
+          description: Root element for a list of valid Action Event details.
+          items:
+            $ref: "#/components/schemas/ClaimValidActions"
+        adjustmentDetails:
+          type: array
+          description: Root element for a list of Adjustment details.
+          items:
+            $ref: "#/components/schemas/AdjustmentDetails"
+        adjustmentReversalDetails:
+          type: array
+          description: Root element for a list of Adjustment details.
+          items:
+            $ref: "#/components/schemas/AdjustmentReversalDetails"
+        representmentDetails:
+          type: array
+          description: Root element for a list of Representment details.
+          items:
+            $ref: "#/components/schemas/RepresentmentDetails"
+        representmentReversalDetails:
+          type: array
+          description: Root element for a list of Representment Reversal details.
+          items:
+            $ref: "#/components/schemas/RepresentmentReversalDetails"
+        caseFilingSummaries:
+          type: array
+          description: Root element for a list of Case Filing summaries.
+          items:
+            $ref: "#/components/schemas/CaseFilingSummaries"
+    AdjustmentDetails:
+      type: object
+      properties:
+        eventType:
+          $ref: "#/components/schemas/EventTypeAdjustment"
+        eventExpiryDateTime:
+          type: string
+          description: Date and time that the adjustment event expires.
+          example: "2023-09-27T16:54:13.546Z"
+        eventId:
+          $ref: "#/components/schemas/EventIdProperty"
+        replacementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        reasonCode:
+          type: string
+          description: Reason code submitted for the adjustment.
+          example: "10"
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumberProperty"
+        clearingStatus:
+          $ref: "#/components/schemas/ClearingStatus"
+        rejectCode:
+          $ref: "#/components/schemas/RejectCode"
+        rejectReason:
+          $ref: "#/components/schemas/RejectReason"
+        settlementDate:
+          $ref: "#/components/schemas/SettlementDate"
+        issuerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        issuerSettlementAmountIndicator:
+          $ref: "#/components/schemas/IssuerSettlementAmountIndicator"
+        acquirerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        acquirerSettlementAmountIndicator:
+          $ref: "#/components/schemas/AcquirerSettlementAmountIndicator"
+        documentIndicator:
+          $ref: "#/components/schemas/DocumentIndicator"
+        documentStatus:
+          $ref: "#/components/schemas/DocumentStatus"
+        completedDocumentsAttributes:
+          $ref: "#/components/schemas/CompletedDocumentsAttributes"
+        creationDate:
+          $ref: "#/components/schemas/CreationDate"
+        eventLastModifiedBy:
+          $ref: "#/components/schemas/EventLastModifiedBy"
+        lastUpdatedDateTime:
+          $ref: "#/components/schemas/LastUpdatedDateTime"
+    AdjustmentReversalDetails:
+      type: object
+      properties:
+        eventType:
+          $ref: "#/components/schemas/EventTypeAdjustmentReversal"
+        eventExpiryDateTime:
+          type: string
+          description: Date and time that the adjustment reversal event expires.
+          example: "2023-09-27T16:54:13.546Z"
+        eventId:
+          $ref: "#/components/schemas/EventIdProperty"
+        eventReferenceId:
+          $ref: "#/components/schemas/EventReferenceId"
+        groupId:
+          $ref: "#/components/schemas/GroupId"
+        replacementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        reasonCode:
+          type: string
+          description: Reason code submitted for the adjustment.
+          example: "85"
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumberProperty"
+        clearingStatus:
+          $ref: "#/components/schemas/ClearingStatus"
+        rejectCode:
+          $ref: "#/components/schemas/RejectCode"
+        rejectReason:
+          $ref: "#/components/schemas/RejectReason"
+        settlementDate:
+          $ref: "#/components/schemas/SettlementDate"
+        issuerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        issuerSettlementAmountIndicator:
+          $ref: "#/components/schemas/IssuerSettlementAmountIndicator"
+        acquirerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        acquirerSettlementAmountIndicator:
+          $ref: "#/components/schemas/AcquirerSettlementAmountIndicator"
+        creationDate:
+          $ref: "#/components/schemas/CreationDate"
+        eventLastModifiedBy:
+          $ref: "#/components/schemas/EventLastModifiedBy"
+        lastUpdatedDateTime:
+          $ref: "#/components/schemas/LastUpdatedDateTime"
+    RepresentmentDetails:
+      type: object
+      properties:
+        eventType:
+          $ref: "#/components/schemas/EventTypeRepresentment"
+        eventExpiryDateTime:
+          type: string
+          description: Date and time that the representment event expires.
+          example: "2023-09-27T16:54:13.546Z"
+        eventId:
+          $ref: "#/components/schemas/EventIdProperty"
+        eventReferenceId:
+          $ref: "#/components/schemas/EventReferenceId"
+        groupId:
+          $ref: "#/components/schemas/GroupId"
+        disputeAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        reasonCode:
+          type: string
+          description: Reason code submitted for the representment.
+          example: "13"
+        clearingStatus:
+          $ref: "#/components/schemas/ClearingStatus"
+        rejectCode:
+          $ref: "#/components/schemas/RejectCode"
+        rejectReason:
+          $ref: "#/components/schemas/RejectReason"
+        documentIndicator:
+          $ref: "#/components/schemas/DocumentIndicator"
+        documentStatus:
+          $ref: "#/components/schemas/DocumentStatus"
+        completedDocumentsAttributes:
+          $ref: "#/components/schemas/CompletedDocumentsAttributes"
+        additionalInformation:
+          $ref: "#/components/schemas/AdditionalInformation"
+        creationDate:
+          $ref: "#/components/schemas/CreationDate"
+        eventLastModifiedBy:
+          $ref: "#/components/schemas/EventLastModifiedBy"
+        lastUpdatedDateTime:
+          $ref: "#/components/schemas/LastUpdatedDateTime"
+        singleMessage:
+          $ref: "#/components/schemas/RepresentmentDetailsSingleMessage"
+    RepresentmentDetailsSingleMessage:
+      type: object
+      properties:
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumberProperty"
+        settlementDate:
+          $ref: "#/components/schemas/SettlementDate"
+        issuerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        issuerSettlementAmountIndicator:
+          $ref: "#/components/schemas/IssuerSettlementAmountIndicator"
+        acquirerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        acquirerSettlementAmountIndicator:
+          $ref: "#/components/schemas/AcquirerSettlementAmountIndicator"
+    RepresentmentReversalDetails:
+      type: object
+      properties:
+        eventType:
+          $ref: "#/components/schemas/EventTypeRepresentmentReversal"
+        eventExpiryDateTime:
+          type: string
+          description: Date and time that the representment reversal event expires.
+          example: "2023-09-27T16:54:13.546Z"
+        eventId:
+          $ref: "#/components/schemas/EventIdProperty"
+        eventReferenceId:
+          $ref: "#/components/schemas/EventReferenceId"
+        groupId:
+          $ref: "#/components/schemas/GroupId"
+        creationDate:
+          $ref: "#/components/schemas/CreationDate"
+        clearingStatus:
+          $ref: "#/components/schemas/ClearingStatus"
+        rejectCode:
+          $ref: "#/components/schemas/RejectCode"
+        rejectReason:
+          $ref: "#/components/schemas/RejectReason"
+        eventLastModifiedBy:
+          $ref: "#/components/schemas/EventLastModifiedBy"
+        lastUpdatedDateTime:
+          $ref: "#/components/schemas/LastUpdatedDateTime"
+        singleMessage:
+          $ref: "#/components/schemas/RepresentmentReversalDetailsSingleMessage"
+    RepresentmentReversalDetailsSingleMessage:
+      type: object
+      properties:
+        reasonCode:
+          type: string
+          description: Reason code submitted for the representment reversal.
+          example: "06"
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumberProperty"
+        settlementDate:
+          $ref: "#/components/schemas/SettlementDate"
+        issuerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        issuerSettlementAmountIndicator:
+          $ref: "#/components/schemas/IssuerSettlementAmountIndicator"
+        acquirerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        acquirerSettlementAmountIndicator:
+          $ref: "#/components/schemas/AcquirerSettlementAmountIndicator"
+    ClaimTransactionDetails:
+      type: object
+      properties:
+        singleMessages:
+          type: array
+          description: List of single message details.
+          items:
+            $ref: "#/components/schemas/ClaimTransactionSingleMessage"
+      description: Root element for a list of transaction details.
+    ChargebackDetails:
+      type: object
+      properties:
+        eventType:
+          $ref: "#/components/schemas/EventTypeChargeback"
+        eventExpiryDateTime:
+          type: string
+          description: Date and time that the chargeback event expires.
+          example: "2023-09-27T16:54:13.546Z"
+        eventId:
+          $ref: "#/components/schemas/EventIdProperty"
+        eventReferenceId:
+          $ref: "#/components/schemas/EventReferenceId"
+        groupId:
+          $ref: "#/components/schemas/GroupId"
+        disputeAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        reasonCode:
+          type: string
+          description: Reason code submitted for the chargeback.
+          example: "70"
+        clearingStatus:
+          $ref: "#/components/schemas/ClearingStatus"
+        rejectCode:
+          $ref: "#/components/schemas/RejectCode"
+        rejectReason:
+          $ref: "#/components/schemas/RejectReason"
+        expirationDate:
+          type: string
+          description: Card expiration date.
+          example: "2301"
+        creditPostedAsPurchase:
+          $ref: "#/components/schemas/CreditPostedAsPurchase"
+        documentIndicator:
+          $ref: "#/components/schemas/DocumentIndicator"
+        documentStatus:
+          $ref: "#/components/schemas/DocumentStatus"
+        completedDocumentsAttributes:
+          $ref: "#/components/schemas/CompletedDocumentsAttributes"
+        additionalInformation:
+          $ref: "#/components/schemas/AdditionalInformation"
+        creationDate:
+          $ref: "#/components/schemas/CreationDate"
+        eventLastModifiedBy:
+          $ref: "#/components/schemas/EventLastModifiedBy"
+        lastUpdatedDateTime:
+          $ref: "#/components/schemas/LastUpdatedDateTime"
+        singleMessage:
+          $ref: "#/components/schemas/SingleMessageChargebackDetails"
+    SingleMessageChargebackDetails:
+      type: object
+      properties:
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumberProperty"
+        program:
+          type: string
+          description: Type of card program with the account number. This field is mandatory when the Reason Code is 49.
+          example: "QMAP"
+        securityBulletinNumber:
+          type: string
+          description: The three-digit Global Security Bulletin number. This field is mandatory when the brand is MD and the reason code is 49. Format is YMM. (For example, the format of the bulletin number of 6 June 2008 would be entered as 806).
+          example: "806"
+        noShowReason:
+          type: string
+          description: The No Show Reason associated to the chargeback.
+          example: "RS_5_GUARANTEED_RESERVATION_SERVICE"
+        noShowCode:
+          type: string
+          description: The No Show Code associated to the chargeback.
+          example: "NS_1_CARDHOLDER_CANCELED_RESERVATION_HAS_VALID_CANCELLATION_NUMBER"
+        cancelNumber:
+          type: string
+          description: Cancellation number of the reservation. Required for Reason Code 59 when No Show Code = 1.
+          example: "CANCEL854689532"
+        settlementDate:
+          $ref: "#/components/schemas/SettlementDate"
+        issuerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        issuerSettlementAmountIndicator:
+          $ref: "#/components/schemas/IssuerSettlementAmountIndicator"
+        acquirerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        acquirerSettlementAmountIndicator:
+          $ref: "#/components/schemas/AcquirerSettlementAmountIndicator"
+    ChargebackReversalDetails:
+      type: object
+      properties:
+        eventType:
+          $ref: "#/components/schemas/EventTypeChargebackReversal"
+        eventExpiryDateTime:
+          type: string
+          description: The date and time that the dispute event expires.
+          example: "2024-01-27T16:54:13.546Z"
+        eventId:
+          $ref: "#/components/schemas/EventIdProperty"
+        eventReferenceId:
+          $ref: "#/components/schemas/EventReferenceId"
+        groupId:
+          $ref: "#/components/schemas/GroupId"
+        clearingStatus:
+          $ref: "#/components/schemas/ClearingStatus"
+        rejectCode:
+          $ref: "#/components/schemas/RejectCode"
+        rejectReason:
+          $ref: "#/components/schemas/RejectReason"
+        creationDate:
+          $ref: "#/components/schemas/CreationDate"
+        eventLastModifiedBy:
+          $ref: "#/components/schemas/EventLastModifiedBy"
+        lastUpdatedDateTime:
+          $ref: "#/components/schemas/LastUpdatedDateTime"
+        singleMessage:
+          $ref: "#/components/schemas/SingleMessageReversalDetails"
+    SingleMessageReversalDetails:
+      type: object
+      properties:
+        reasonCode:
+          type: string
+          description: Reason code submitted for the chargeback reversal.
+          example: "03"
+        controlNumber:
+          $ref: "#/components/schemas/ControlNumberProperty"
+        settlementDate:
+          $ref: "#/components/schemas/SettlementDate"
+        issuerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        issuerSettlementAmountIndicator:
+          $ref: "#/components/schemas/IssuerSettlementAmountIndicator"
+        acquirerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        acquirerSettlementAmountIndicator:
+          $ref: "#/components/schemas/AcquirerSettlementAmountIndicator"
+    ClaimTransactionSingleMessage:
+      type: object
+      properties:
+        acceptorCountryCode:
+          type: string
+          description: The three-character alphabetic code of the country where the acquirer is located.
+          example: "USA"
+        acceptorStreetAddress:
+          type: string
+          description: Displays the acquirerâ€™s address, which should include the street number, street name, and other identifiers of the precise location, such as a building or unit number.
+          example: "2200 Mastercard Blvd"
+        cardAcceptorCity:
+          type: string
+          description: City that acquirer assigned to its merchant.
+          example: "LOS ANGELES CA"
+        acquirerInstitutionIdCode:
+          type: string
+          description: Identifies the acquirer (for example, merchant bank) or its agent.
+          example: "1984048007"
+        financialNetworkCode:
+          $ref: "#/components/schemas/FinancialNetworkCode"
+        acceptorIdentification:
+          type: string
+          description: Debit Mastercard field only. Acquirer Name is a card acceptor identification code assigned by the merchant.
+          example: "DOM 1"
+        forwardingInstitutionIdCode:
+          type: string
+          description: The acquirerâ€™s processor identification number.
+          example: "9000000457"
+        acquirerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        acquirerSettlementConversionRate:
+          type: string
+          description: The rate used in the conversion from transaction to settlement amount.
+          example: "11000000"
+        banknetReferenceNumber:
+          type: string
+          description: The reference number assigned by Mastercard to each authorization message. The Banknet reference number contains the financial network code, a unique identifying number, and the identification of the Mastercard interface processor (MIP) that generated it.
+          example: "SDYP1MRWD"
+        cashBackAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        cardholderActivatedTerminalLevel:
+          type: string
+          description: Cardholder-Activated Terminal Level from the first presentment.
+          example: "1"
+        chipFlag:
+          type: string
+          description: Indicates if the chip data was present on the first presentment.
+          example: "N"
+        extendedConditionCodesPosData:
+          type: string
+          description: Code that describes the PAN entry, PIN entry, and authorization mode of a transaction.
+          example: "400"
+        crossBorderTransactionIndicator:
+          type: string
+          description:
+            Any transaction processed through the Single Message System in which the cardholder
+            country code differs from the merchant country code.
+          example: "N"
+        currencyConversionAssessmentAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        cvc2ValidationProgramIndicator:
+          type: string
+          description:
+            Debit Mastercard field only. A value of C indicates that the merchant participates in the
+            Mastercard CVC 2 Validation Program.
+          example: "C"
+        authorizingAgentInstitutionId:
+          type: string
+          description:
+            Indicates the routing and transit number of the issuer. If the issuer has no routing and
+            transit number (for example, the institution is international), then the number displayed is the
+            pseudo number assigned by Mastercard.
+          example: "1900000757"
+        receivingInstitutionIdentificationCode:
+          type: string
+          description: Identifies the receiver of the message.
+          example: "9000000476"
+        issuerSettlementAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        issuerSettlementConversionRate:
+          type: string
+          description: Factor used in the conversion from first presentment to settlement amount.
+          example: "1.1922"
+        cardAcceptorType:
+          $ref: "#/components/schemas/CardAcceptorType"
+        cardholderBillingAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        pointOfServiceAmount:
+          $ref: "#/components/schemas/AmountDetails"
+        pointOfServiceTerminalAttendance:
+          type: string
+          description: Indicates if the acceptor is attending the terminal.
+          example: "1"
+        pointOfServiceTerminalLocation:
+          type: string
+          description: Indicates the terminal location. For example, could indicate whether the terminal is on or off premises of the acceptor facility.
+          example: "4"
+        pointOfServiceCardholderPresence:
+          type: string
+          description: Indicates whether the cardholder is present at the point of service and explains the condition if the cardholder is not present.
+          example: "5"
+        pointOfServiceCardPresence:
+          type: string
+          description: Indicates if the card is present at the point of service.
+          example: "0"
+        pointOfServiceCardRetention:
+          type: string
+          description: Terminal card capture capabilities.
+          example: "0"
+        pointOfServiceTransactionStatus:
+          type: string
+          description: The purpose or status of the request.
+          example: "0"
+        pointOfServiceTransactionSecurity:
+          type: string
+          description: The acceptorâ€™s confidence in the transaction security level.
+          example: "0"
+        pointOfServiceCardDataTerminalInputCapability:
+          type: string
+          description: The set of methods supported by the terminal for the input of account number, card, or mobile device data.
+          example: "4"
+        pointOfServiceAuthorizationLifeCycle:
+          type: string
+          description: The number of days a preauthorization will remain in effect.
+          example: "01"
+        pointOfServiceCountryCode:
+          type: string
+          description: Numeric country code of the Point of Service location (not the acquirer location).
+          example: "840"
+        acceptorPostalCode:
+          type: string
+          description: The postal code of the acceptor.
+          example: "63368"
+        pointOfServiceEntryMode:
+          type: string
+          description:
+            Consists of numeric codes that indicate the method used to enter the PAN into the
+            terminal device and the PIN entry capability of that device.
+          example: "070"
+        cardSequenceNumber:
+          type: string
+          description: Card Sequence Number used to distinguish separate cards that use the same PAN.
+          example: "12121225663355"
+        processingCode:
+          $ref: "#/components/schemas/ProcessingCode"
+        programParticipationIndicatorQpsContactlessChargebackEligibility:
+          type: string
+          description:
+            Debit Mastercard field only. A value of I indicates that the
+            transaction is not eligible for a chargeback with reason codes 0001,
+            0002 or 0037.
+          example: "I"
+        responseCode:
+          $ref: "#/components/schemas/ResponseCode"
+        trackTwoDataExtendedServiceCode:
+          type: integer
+          description:
+            Extended service code of Track 2 data indicating the transaction acceptance parameters
+            of a magnetic stripe card.
+          example: "101"
+        mastercardMerchantDataServicesServiceLevelIndicator:
+          type: integer
+          description: Represents the services the issuer has registered for and the response value.
+          example: "120"
+        settlementDate:
+          $ref: "#/components/schemas/SettlementDate"
+        settlementServiceData:
+          type: string
+          description: Data related to the settlement details such as intracurrency or direct settlement.
+          example: "000"
+        surchargeFreeIndicator:
+          type: string
+          description:
+            An indicator that identifies whether a transaction participated in the ATM Access
+            Surcharge-Free program or not.
+          example: "A"
+        switchSerialNumber:
+          $ref: "#/components/schemas/SwitchSerialNumberProperty"
+        cardAcceptorTerminalId:
+          type: string
+          description:
+            Identifier assigned by the acceptor or the acquirer to the terminal, payment gateway, or
+            other acceptance device used to capture account data to effect a transaction at the acceptor
+            location.
+          example: "TC12"
+        systemsTraceAuditNumber:
+          $ref: "#/components/schemas/SystemsTraceAuditNumber"
+        transactionDateTime:
+          $ref: "#/components/schemas/TransactionDateTime"
+        transitProgram:
+          type: string
+          description: Identifies a transit transaction.
+          example: "0205"
+        interchangeRateIndicator:
+          $ref: "#/components/schemas/InterchangeRateIndicator"
+        universalCardholderAuthenticationField:
+          type: string
+          description:
+            Contains the encoded Mastercard Identity Check issuer or cardholder generated
+            authentication data. For e-commerce purchases, this subelement can carry Universal Cardholder
+            AuthenticationField (UCAF) data.
+          example: "0"
+    ClaimValidActions:
+      type: object
+      properties:
+        action:
+          type: string
+          description: The actions available on the claim.
+          example: "Create Chargeback"
+        reasonCodes:
+          type: array
+          description: List of allowed reason codes.
+          items:
+            $ref: "#/components/schemas/ValidActionReasonCodes"
+    ValidActionReasonCodes:
+      type: object
+      properties:
+        reasonCode:
+          type: string
+          description: Reason code allowed per the valid actions.
+          example: "70"
+        description:
+          type: string
+          description: Description of reason code.
+          example: "Chip Liability Shift"
+        documentRequiredIndicator:
+          type: string
+          description: Indicates if documentation is required for this reason code.
+          example: "Y"
+    RepresentmentCreate:
+      required:
+        - disputeAmount
+        - reasonCode
+        - documentIndicator
+      type: object
+      properties:
+        disputeAmount:
+          type: string
+          description: |
+            Amount disputed, written without a decimal. Includes the exponent.
+
+            *Valid Values/Format:* Numeric
+          minLength: 1
+          maxLength: 12
+          example: "100000"
+        reasonCode:
+          type: string
+          description: |
+            Reason code submitted for the representment.
+
+            *Valid Values/Format:* Numeric
+          minLength: 2
+          maxLength: 2
+          example: "13"
+        documentIndicator:
+          type: boolean
+          description: |
+            Specify TRUE if documentation is being attached or will be attached at a later time for this event.
+            Otherwise, specify FALSE.
+          example: true
+        documentMemo:
+          $ref: "#/components/schemas/DocumentMemo"
+        documentUploadedId:
+          $ref: "#/components/schemas/DocumentUploadedId"
+        additionalInformation:
+          $ref: "#/components/schemas/AdditionalInformationParameter"
+        singleMessage:
+          $ref: "#/components/schemas/RepresentmentSingleMessage"
+    RepresentmentCreateEventId:
+      type: object
+      properties:
+        eventId:
+          $ref: "#/components/schemas/EventId"
+    RepresentmentUpdate:
+      required:
+        - acknowledge
+      type: object
+      properties:
+        acknowledge:
+          type: boolean
+          description:
+            Setting this parameter to true moves the claim to the Worked queue. Acquirers may take further
+            actions on acknowledged claims.
+          example: true
+    RepresentmentReversal:
+      required:
+        - reasonCode
+      type: object
+      properties:
+        reasonCode:
+          type: string
+          description: |
+            Reason code submitted for the Representment Reversal.
+
+            *Valid Values/Format:* Numeric
+          example: "06"
+          minLength: 2
+          maxLength: 2
+        singleMessage:
+          $ref: "#/components/schemas/RepresentmentSingleMessageReversal"
+    ChargebackReversal:
+      required:
+        - reasonCode
+      type: object
+      properties:
+        reasonCode:
+          type: string
+          description: |
+            Reason code submitted for the chargeback reversal.
+
+            *Valid Values/Format:* Numeric
+          example: "03"
+          minLength: 2
+          maxLength: 2
+        singleMessage:
+          $ref: "#/components/schemas/ChargebackSingleMessageReversal"
+    ChargebackReversalEventId:
+      type: object
+      properties:
+        eventId:
+          $ref: "#/components/schemas/EventId"
+    RepresentmentReversalEventId:
+      type: object
+      properties:
+        eventId:
+          $ref: "#/components/schemas/EventId"
+    CreateClaim:
+      type: object
+      required:
+        - contextId
+      properties:
+        contextId:
+          $ref: "#/components/schemas/ContextIdParameter"
+        contextType:
+          type: string
+          enum:
+            - TRANSACTION
+          description: Context type associated to the context ID from the transaction search response.
+          example: "TRANSACTION"
+          default: TRANSACTION
+    ClaimCreateId:
+      type: object
+      properties:
+        claimId:
+          $ref: "#/components/schemas/ClaimIdProperty"
+    AmountDetails:
+      description: |
+        Contains information about an amount related to a specific event in the original transaction or dispute lifecycle.
+
+        Only one definition below applies to this specific amount object. Amounts are defined as follows:
+
+          **acquirerSettlementAmount** - Original completed amount of the transaction in local currency not including fees.
+
+          **cardholderBillingAmount** - First presentment amount converted to the cardholder billing amount, exclusive of Currency Conversion Assessment.
+
+          **caseDisputeAmount** - Amount disputed in the case, written without a decimal. Includes the exponent.
+
+          **cashBackAmount** - Amount of cash distributed on a first presentment with cash back transaction.
+
+          **collaborationAmount** - Amount credited to issuer from Collaboration.
+
+          **currencyConversionAssessmentAmount** - Amount calculated by the Single Message System that is the result of the currency conversion assessment being applied to qualifying transactions.
+
+          **disputeAmount** - Amount disputed, written without a decimal. Includes the exponent.
+
+          **issuerSettlementAmount** - Settlement amount displayed in the issuer's chosen settlement currency, as processed in the Single Message System.
+
+          **pointOfServiceAmount** - Displays the amount at the Point of Service.
+
+          **refundReversalAmount** - Amount refunded to the cardholder.
+
+          **replacementAmount** - The replacement amount for the original transaction.
+
+          **totalDisputeAmount** - The total amount under dispute. Consists of sum of multiple dispute amounts, if any exist for the claim.
+
+          **transactionAmount** - Amount of funds requested by the cardholder in the local currency of the acquirer or source location of the transaction.
+      type: object
+      properties:
+        displayAmount:
+          type: string
+          description: Amount expressed in decimal format.
+          example: "100.25"
+        wholeAmount:
+          type: string
+          description: Amount to the left of the decimal.
+          example: "100"
+        decimalAmount:
+          type: string
+          description: Decimal portion of the amount.
+          example: "25"
+        alphaCurrencyCodes:
+          type: array
+          description: The alphabetic code defining the currency of the amount.
+          example:
+            - USD
+          items:
+            type: string
+        numericCurrencyCode:
+          type: string
+          description: Numeric code defining the currency of the amount.
+          example: "840"
+        currencyExponent:
+          type: string
+          description: Currency exponent associated to the currency code of the amount.
+          example: "2"
+    CompletedDocumentAttributes:
+      description: Descriptive document object.
+      type: object
+      properties:
+        documentCompletedId:
+          type: string
+          description: Identifier assigned by Mastercom to a document which has completed processing.
+          example: "400000011952"
+        documentCompletedFormat:
+          type: string
+          description: Format of the document.
+          example: "PDF"
+        documentCompletedFileName:
+          type: string
+          description: File name of the document.
+          example: "completedDocument.pdf"
+        documentCompletedFileSize:
+          type: string
+          description: Size of the document in bytes.
+          example: "342"
+    CaseFilingSummaries:
+      description: Descriptive case filing summary object.
+      type: object
+      properties:
+        caseId:
+          type: string
+          description: |
+            Identifier assigned by Mastercom to the case, obtained from the ```POST /cases/arbitrations``` or ```POST /cases/compliances``` endpoints.
+          example: "5415063"
+        caseStatus:
+          $ref: "#/components/schemas/CaseStatus"
+
+  requestBodies:
+    Document:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Document"
+    ChargebackUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ChargebackUpdate"
+    Documents:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Documents"
+    InitiateDispute:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/InitiateDispute"
+          examples:
+            Single Message:
+              $ref: "#/components/examples/DisputesCreateSingleMessage"
+      required: true
+    ReportsCreate:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReportsCreate"
+          examples:
+            Create Report with ICAs:
+              $ref: "#/components/examples/ReportCreateIcas"
+            Create Report with PROC_IDs:
+              $ref: "#/components/examples/ReportCreateProcIds"
+            Create Report with RTNs:
+              $ref: "#/components/examples/ReportCreateRtns"
+            Create Report with no FGA:
+              $ref: "#/components/examples/ReportCreateNoFga"
+      required: true
+    ReportSearch:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReportSearch"
+      required: true
+    TransactionSearch:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TransactionSearch"
+          examples:
+            PAN Search:
+              $ref: "#/components/examples/TransactionSearchPAN"
+            SSN Search:
+              $ref: "#/components/examples/TransactionSearchSSN"
+      required: true
+    ClaimSearch:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ClaimSearch"
+          examples:
+            Claim Search by Context ID:
+              $ref: "#/components/examples/ClaimSearchContextID"
+            Claim Search by PAN:
+              $ref: "#/components/examples/ClaimSearchPAN"
+            Claim Search by SSN:
+              $ref: "#/components/examples/ClaimSearchSSN"
+      required: true
+    RepresentmentCreate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RepresentmentCreate"
+          examples:
+            Single Message:
+              $ref: "#/components/examples/RepresentmentCreateSingleMessage"
+    RepresentmentUpdate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RepresentmentUpdate"
+    RepresentmentsReversal:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RepresentmentReversal"
+      required: true
+    ChargebackReversal:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ChargebackReversal"
+      required: true
+    CreateClaim:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CreateClaim"
+      required: true
+    ArbitrationCaseCreate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ArbitrationCaseCreate"
+    ComplianceCaseCreate:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ComplianceCaseCreate"
+          examples:
+            Create case with AlphaCurrencyCode:
+              $ref: "#/components/examples/ComplianceCaseDisputeAmountAlphaCurrencyCode"
+            Create case with NumericCurrencyCode:
+              $ref: "#/components/examples/ComplianceCaseDisputeAmountNumericCurrencyCode"
+    CaseTakeActionCompliance:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CaseTakeActionCompliance"
+    CaseTakeActionArbitration:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CaseTakeActionArbitration"
+    CaseTakeActionDocumentRetry:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CaseTakeActionDocumentRetry"
+  responses:
+    DocumentRetrieve:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DocumentRetrieve"
+    ChargebackUpdateStatus:
+      description: Success - No Content
+    DocumentsResponse:
+      description: Success - No Content
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for attaching a Document
+          example: "/documents/400000011952"
+    ClaimDetails:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ClaimDetails"
+    DisputesCreateEvent:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Create Dispute
+          example: "/claims/700000022591"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DisputesCreateEventId"
+    DocumentUpload:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Document Upload
+          example: "/documents/400000011952"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DocumentUpload"
+    DocumentAttributes:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DocumentAttributesList"
+    QueueDefinitionsList:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/QueueDefinitionsList"
+    CreatedReportDetails:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Create Report
+          example: "/reports/RR-01-30"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CreatedReportDetails"
+    ReportList:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReportList"
+    TransactionList:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/TransactionList"
+          examples:
+            Single Message:
+              $ref: "#/components/examples/TransactionSearchSingleMessage"
+    ClaimsList:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ClaimsList"
+    ReportsStatus:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReportsStatus"
+    Report:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Report"
+    ReportDefinitionList:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReportDefinitionList"
+    ReportDefinition:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReportDefinition"
+    QueueDefinition:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/QueueDefinition"
+    Queue:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Queue"
+    RepresentmentCreateResponse:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Create Representment
+          example: "/claims/700000022591?claim_entities=CHARGEBACK"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RepresentmentCreateEventId"
+    ChargebackReversalEventId:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Chargeback Reversal
+          example: "/claims/700000022591?claim_entities=CHARGEBACK"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ChargebackReversalEventId"
+    RepresentmentReversalEventId:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Representment Reversal
+          example: "/claims/700000022591?claim_entities=REPRESENTMENT"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/RepresentmentReversalEventId"
+    ArbitrationCaseCreateCaseId:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Arbitration Case Create
+          example: "/cases/5415063"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CaseCreateCaseId"
+    ComplianceCaseCreateCaseId:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Compliance Case Create
+          example: "/cases/5415063"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CaseCreateCaseId"
+    CaseTakeActionStatus:
+      description: Success - No Content
+    CasesDocumentAttributes:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CasesDocumentAttributes"
+    CaseDetailsRetrieve:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/CaseDetails"
+    UnauthorizedErrorResponse:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorWrapper"
+          examples:
+            UnauthorizedExample:
+              value:
+                Errors:
+                  Error:
+                    - Source: Mastercom Extended
+                      ReasonCode: NOT_AUTHORIZED_REQUEST
+                      Description: Unauthorized
+                      Recoverable: false
+                      Details: Unauthorized
+    NotFoundErrorResponse:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorWrapper"
+          examples:
+            NotFoundExample:
+              value:
+                Errors:
+                  Error:
+                    - Source: Mastercom Extended
+                      ReasonCode: RESOURCE_UNKNOWN
+                      Description: Resource not found
+                      Recoverable: false
+                      Details: Resource not found
+    BadRequestErrorResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorWrapper"
+          examples:
+            BadRequestExample:
+              value:
+                Errors:
+                  Error:
+                    - Source: Mastercom Extended
+                      ReasonCode: BAD_REQUEST
+                      Description: Bad Request
+                      Recoverable: false
+                      Details: Bad Request
+    ForbiddenErrorResponse:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorWrapper"
+          examples:
+            ForbiddenExample:
+              value:
+                Errors:
+                  Error:
+                    - Source: Mastercom Extended
+                      ReasonCode: FORBIDDEN
+                      Description: Forbidden
+                      Recoverable: false
+                      Details: Forbidden
+    RepresentmentWithNoEvent:
+      description: Success - No Content
+    ClaimCreateId:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Create Claim
+          example: "/claims/700000022591"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ClaimCreateId"
+  examples:
+    RepresentmentCreateSingleMessage:
+      summary: Representment initiation for single message transactions.
+      value:
+        disputeAmount: "100000"
+        reasonCode: "13"
+        documentIndicator: true
+        documentMemo: "Cardholder letter."
+        documentUploadedId: "68bc19bf9df511ee8855eeee0afc63f1"
+        additionalInformation: "MULTIPLE AUTH REQUESTS"
+        singleMessage:
+          controlNumber: "99999"
+    DisputesCreateSingleMessage:
+      summary: Dispute initiation for single message transactions.
+      value:
+        autoChargeback: true
+        creditPostedAsPurchase: false
+        disputeAmount: "100000"
+        reasonCode: "70"
+        documentIndicator: true
+        documentMemo: "Cardholder letter."
+        documentUploadedId: "e59c3a2a9f4311ee8855eeee0afc63f1"
+        expirationDate: "2301"
+        additionalInformation: "MULTIPLE AUTH REQUESTS"
+        singleMessage:
+          controlNumber: "99999"
+          noShowReason: "RS_5_GUARANTEED_RESERVATION_SERVICE"
+          noShowCode: "NS_1_CARDHOLDER_CANCELED_RESERVATION_HAS_VALID_CANCELLATION_NUMBER"
+          program: "QMAP"
+          securityBulletinNumber: "806"
+          cancelNumber: "CANCEL854689532"
+    ReportCreateIcas:
+      summary: Create reports with ICAS as FGA criteria
+      value:
+        reportDefinitionId: RD-00-1000
+        format: CSV
+        startDate: "2024-01-28"
+        endDate: "2024-01-29"
+        filters:
+          - filterName: ICA
+            filterValues: ["1234", "5678"]
+    ReportCreateProcIds:
+      summary: Create reports with PROC_IDS as FGA criteria
+      value:
+        reportDefinitionId: RD-00-1000
+        format: CSV
+        startDate: "2024-01-28"
+        endDate: "2024-01-29"
+        filters:
+          - filterName: PROC_ID
+            filterValues: ["1234567890", "0123456789"]
+    ReportCreateRtns:
+      summary: Create reports with RTNS as FGA criteria
+      value:
+        reportDefinitionId: RD-00-1000
+        format: CSV
+        startDate: "2024-01-28"
+        endDate: "2024-01-29"
+        filters:
+          - filterName: RTN
+            filterValues: ["911139876", "9162239660"]
+    ReportCreateNoFga:
+      summary: Create reports with no FGA criteria
+      value:
+        reportDefinitionId: RD-00-1000
+        format: CSV
+        startDate: "2024-01-05"
+        endDate: "2024-01-29"
+    TransactionSearchPAN:
+      summary: PAN Search
+      value:
+        primaryAccountNumber: "5488888888887192"
+        transactionAmountFrom: "10015"
+        transactionAmountTo: "30015"
+        startDate: "2024-01-05"
+        endDate: "2024-02-28"
+    TransactionSearchSSN:
+      summary: SSN Search
+      value:
+        switchSerialNumber: "242025095"
+        startDate: "2024-01-05"
+    TransactionSearchSingleMessage:
+      summary: Single Message
+      value:
+        transactionsData:
+          singleMessages:
+            - contextId: "TXN_63cef42e6f7711eaa77feeee0afdc116"
+              contextType: "TRANSACTION"
+              claimId: "7012353455"
+              authorization:
+                acquirerReferenceNumber: "51310541655698741481459"
+                financialNetworkCode: "MS"
+                transactionAmount:
+                  displayAmount: "119.99"
+                  wholeAmount: "119"
+                  decimalAmount: "99"
+                  numericCurrencyCode: "840"
+                  currencyExponent: "2"
+                  alphaCurrencyCodes:
+                    - USD
+                acceptorName: "Amazon"
+                cardAcceptorType: "4829"
+                tokenizedPrimaryAccountNumber: "4312915487625131"
+                primaryAccountNumber: "5488888888887192"
+                processingCode: "000000"
+                responseCode: "00"
+                settlementDate: "2023-08-16"
+                switchSerialNumber: "242025095"
+                transmissionDateTime: "2024-02-02T16:44:13.546Z"
+                systemsTraceAuditNumber: "999999"
+                interchangeRateIndicator: "2"
+              clearing:
+                acquirerReferenceNumber: "51310541655698741481459"
+                financialNetworkCode: "MS"
+                transactionAmount:
+                  displayAmount: "119.99"
+                  wholeAmount: "119"
+                  decimalAmount: "99"
+                  numericCurrencyCode: "840"
+                  currencyExponent: "2"
+                  alphaCurrencyCodes:
+                    - USD
+                acceptorName: "Amazon"
+                cardAcceptorType: "4829"
+                tokenizedPrimaryAccountNumber: "4312915487625131"
+                primaryAccountNumber: "5488888888887192"
+                processingCode: "000000"
+                responseCode: "00"
+                settlementDate: "2024-02-04"
+                switchSerialNumber: "242025095"
+                transmissionDateTime: "2024-02-04T16:44:13.546Z"
+                systemsTraceAuditNumber: "999999"
+                interchangeRateIndicator: "2"
+    ClaimSearchContextID:
+      summary: Claim Search by Context ID
+      value:
+        contextId: "TXN_88e63f72728c11eaa8e3eeee0afff98n"
+        contextType: "TRANSACTION"
+        startDateTime: "2024-02-15T16:54:13.546Z"
+        limit: 25
+        offset: 5
+    ClaimSearchPAN:
+      summary: Claim Search by PAN
+      value:
+        primaryAccountNumber: "5456456868978964"
+        startDateTime: "2024-02-15T16:54:13.546Z"
+        endDateTime: "2024-02-20T16:54:13.546Z"
+        limit: 25
+        offset: 5
+    ClaimSearchSSN:
+      summary: Claim Search by SSN
+      value:
+        switchSerialNumber: "242025095"
+        startDateTime: "2024-02-15T16:54:13.546Z"
+        limit: 25
+        offset: 5
+    ComplianceCaseDisputeAmountAlphaCurrencyCode:
+      summary: Create Pre-Compliance or Compliance Case with AlphaCurrencyCode
+      value:
+        claimId: "713992756751"
+        documentUploadedId: "e59c3a2a9f4311ee8855eeee0afc63f1"
+        customerFilingNumber: "2342134"
+        caseDisputeAmount: "12300"
+        caseDisputeAmountAlphaCurrencyCode: "USD"
+        filingAs: "ISSUER"
+        filingIca: "001234"
+        filedAgainstIca: "004321"
+        violationCode: "CB_EXCEEDS_TIMEFRAME"
+        violationDate: "2023-01-31"
+        memo: "memo text"
+    ComplianceCaseDisputeAmountNumericCurrencyCode:
+      summary: Create Pre-Compliance or Compliance Case with NumericCurrencyCode
+      value:
+        claimId: "713992756751"
+        documentUploadedId: "e59c3a2a9f4311ee8855eeee0afc63f1"
+        customerFilingNumber: "2342134"
+        caseDisputeAmount: "12300"
+        caseDisputeAmountNumericCurrencyCode: "840"
+        filingAs: "ISSUER"
+        filingIca: "001234"
+        filedAgainstIca: "004321"
+        violationCode: "CB_EXCEEDS_TIMEFRAME"
+        violationDate: "2023-01-31"
+        memo: "memo text"

@@ -1,124 +1,84 @@
 import localVarRequest from 'request';
 
-export * from './acquirerFulfillmentRequest';
-export * from './acquirerFulfillmentResponse';
-export * from './authorizationDetail';
-export * from './authorizationSummary';
-export * from './cardholderDisputeChargebackDrfDocumentStructure';
-export * from './cardholderVerificationMethodStructure';
-export * from './caseFilingClaim';
-export * from './caseFilingClaimsRequest';
-export * from './caseFilingClaimsResponse';
-export * from './caseFilingDetails';
-export * from './caseFilingEbdfStructure';
-export * from './caseFilingIdSourceRequest';
-export * from './caseFilingImageStatusRequest';
-export * from './caseFilingImageStatusResponse';
-export * from './caseFilingImageStatusResponseStructure';
-export * from './caseFilingLifeCycle';
-export * from './caseFilingRespHistory';
-export * from './caseFilingResponse';
-export * from './caseFilingStatusRequest';
-export * from './caseFilingStatusRequestStructure';
-export * from './caseFilingStatusResponse';
-export * from './caseFilingStatusResponseStructure';
-export * from './chargebackAmountNameValueDetail';
+export * from './adjustmentDetails';
+export * from './adjustmentReversalDetails';
+export * from './amountDetails';
+export * from './arbitrationCaseCreate';
+export * from './caseActionHistory';
+export * from './caseCreateCaseId';
+export * from './caseDetails';
+export * from './caseDocumentAttributes';
+export * from './caseFilingSummaries';
+export * from './caseTakeActionArbitration';
+export * from './caseTakeActionCompliance';
+export * from './caseTakeActionDocumentRetry';
+export * from './casesDocumentAttributes';
 export * from './chargebackDetails';
-export * from './chargebackDocIndicatorsNameValueDetail';
-export * from './chargebackEbdfStructure';
-export * from './chargebackImageStatusRequest';
-export * from './chargebackImageStatusResponse';
-export * from './chargebackImageStatusResponseStructure';
-export * from './chargebackMarkProcessedRequest';
-export * from './chargebackMarkProcessedRequestStructure';
-export * from './chargebackMarkProcessedResponse';
-export * from './chargebackMarkProcessedResponseStructure';
-export * from './chargebackMessageTextsNameValueDetail';
-export * from './chargebackReasonCodesNameValueDetail';
-export * from './chargebackResponse';
-export * from './chargebackStatusRequest';
-export * from './chargebackStatusRequestStructure';
-export * from './chargebackStatusResponse';
-export * from './chargebackStatusResponseStructure';
-export * from './claimDetail';
-export * from './claimResponse';
-export * from './claimSummary';
-export * from './clearingDetail';
-export * from './clearingSummary';
-export * from './createCaseRequest';
-export * from './createChargebackRequest';
-export * from './createChargebackSingleRequest';
-export * from './createChargebackSingleReversalRequest';
-export * from './createClaimRequest';
-export * from './createFeeRequest';
-export * from './createFeeRequestSingle';
-export * from './createFraudMasterCardRequest';
-export * from './createRetrievalRequest';
-export * from './createRetrievalRequestSingle';
-export * from './createRetrievalResponse';
-export * from './currenciesNameValueDetail';
-export * from './cycle';
-export * from './documentResponseStructure';
-export * from './documentStructure';
-export * from './documentStructureResp';
-export * from './errorDetail';
+export * from './chargebackReversal';
+export * from './chargebackReversalDetails';
+export * from './chargebackReversalEventId';
+export * from './chargebackSingleMessage';
+export * from './chargebackSingleMessageReversal';
+export * from './chargebackUpdate';
+export * from './claim';
+export * from './claimCollaborationDetails';
+export * from './claimCreateId';
+export * from './claimDetails';
+export * from './claimSearch';
+export * from './claimTransactionDetails';
+export * from './claimTransactionSingleMessage';
+export * from './claimValidActions';
+export * from './claimsList';
+export * from './completedDocumentAttributes';
+export * from './complianceCaseCreate';
+export * from './createClaim';
+export * from './createdReportDetails';
+export * from './disputesCreateEventId';
+export * from './document';
+export * from './documentAttributes';
+export * from './documentAttributesList';
+export * from './documentRetrieve';
+export * from './documentUpload';
+export * from './documents';
+export * from './errorWrapper';
 export * from './errors';
-export * from './expeditedBillingDrfDocumentStructure';
-export * from './feeCountryCodesNameValueDetail';
-export * from './feeDetails';
-export * from './feeMessageTextsNameValueDetail';
-export * from './feeReasonCodesNameValueDetail';
-export * from './feeResponse';
-export * from './feeSingleResponse';
-export * from './fraudAcctDeviceTypesNameValueDetail';
-export * from './fraudAcctStatusesNameValueDetail';
-export * from './fraudCardValidCodesNameValueDetail';
-export * from './fraudDrfDocumentStructure';
-export * from './fraudResponse';
-export * from './fraudSubTypesNameValueDetail';
-export * from './getQueueContentRequest';
-export * from './healthCheckResponse';
-export * from './installmentParameters';
-export * from './issuerFulfillmentRequest';
-export * from './loadDataForChargebackResponse';
-export * from './loadDataForChargebacksRequest';
-export * from './loadDataForFeeResponse';
-export * from './loadDataForFeesRequest';
-export * from './loadDataForFraudResponse';
-export * from './loadDataForRetrievalResponse';
+export * from './initiateDispute';
 export * from './modelError';
-export * from './originalInformationInstallments';
-export * from './pointOfInteractionErrorsDrfDocumentStructure';
 export * from './queue';
-export * from './queueContentSummary';
-export * from './reconReportDataAcknowledgeRequest';
-export * from './reconReportDataAcknowledgeResponse';
-export * from './reconReportDataRetrivalResponse';
-export * from './retrievalDocNeededNameValueDetail';
-export * from './retrievalReasonCodesNameValueDetail';
-export * from './retrievalResponse';
-export * from './retrievalStatusRequest';
-export * from './retrievalStatusRequestStructure';
-export * from './retrievalStatusResponse';
-export * from './retrievalStatusResponseStructure';
-export * from './retrievalSummary';
-export * from './retrievalsImageStatusRequest';
-export * from './retrievalsImageStatusResponse';
-export * from './retrievalsImageStatusResponseStructure';
-export * from './singleMessageDetail';
+export * from './queueDefinition';
+export * from './queueDefinitionsList';
+export * from './queueDetails';
+export * from './queueField';
+export * from './queueFieldNameValue';
+export * from './report';
+export * from './reportDefinition';
+export * from './reportDefinitionCriteria';
+export * from './reportDefinitionList';
+export * from './reportDetails';
+export * from './reportFilter';
+export * from './reportList';
+export * from './reportSearch';
+export * from './reportsCreate';
+export * from './reportsStatus';
+export * from './representmentCreate';
+export * from './representmentCreateEventId';
+export * from './representmentDetails';
+export * from './representmentDetailsSingleMessage';
+export * from './representmentReversal';
+export * from './representmentReversalDetails';
+export * from './representmentReversalDetailsSingleMessage';
+export * from './representmentReversalEventId';
+export * from './representmentSingleMessage';
+export * from './representmentSingleMessageReversal';
+export * from './representmentUpdate';
+export * from './singleMessageChargebackDetails';
+export * from './singleMessageReversalDetails';
 export * from './singleMessageSummary';
-export * from './singleMessageSummaryDetails';
-export * from './smsLinkedCaseFilingDrfDocumentStructure';
-export * from './transactionInformationEbdfStructure';
-export * from './transactionSearchRequest';
-export * from './transactionSingleMessageDetail';
-export * from './transactionSingleMessageSummary';
-export * from './transactionSingleMessageSummaryList';
-export * from './transactionSingleSearchRequest';
-export * from './transactionSummary';
-export * from './updateCaseRequest';
-export * from './updateChargebackRequest';
-export * from './updateClaimRequest';
+export * from './transactionData';
+export * from './transactionList';
+export * from './transactionSearch';
+export * from './transactionSingleMessage';
+export * from './validActionReasonCodes';
 
 import * as fs from 'fs';
 
@@ -133,125 +93,85 @@ export interface RequestDetailedFile {
 export type RequestFile = string | Buffer | fs.ReadStream | RequestDetailedFile;
 
 
-import { AcquirerFulfillmentRequest } from './acquirerFulfillmentRequest';
-import { AcquirerFulfillmentResponse } from './acquirerFulfillmentResponse';
-import { AuthorizationDetail } from './authorizationDetail';
-import { AuthorizationSummary } from './authorizationSummary';
-import { CardholderDisputeChargebackDrfDocumentStructure } from './cardholderDisputeChargebackDrfDocumentStructure';
-import { CardholderVerificationMethodStructure } from './cardholderVerificationMethodStructure';
-import { CaseFilingClaim } from './caseFilingClaim';
-import { CaseFilingClaimsRequest } from './caseFilingClaimsRequest';
-import { CaseFilingClaimsResponse } from './caseFilingClaimsResponse';
-import { CaseFilingDetails } from './caseFilingDetails';
-import { CaseFilingEbdfStructure } from './caseFilingEbdfStructure';
-import { CaseFilingIdSourceRequest } from './caseFilingIdSourceRequest';
-import { CaseFilingImageStatusRequest } from './caseFilingImageStatusRequest';
-import { CaseFilingImageStatusResponse } from './caseFilingImageStatusResponse';
-import { CaseFilingImageStatusResponseStructure } from './caseFilingImageStatusResponseStructure';
-import { CaseFilingLifeCycle } from './caseFilingLifeCycle';
-import { CaseFilingRespHistory } from './caseFilingRespHistory';
-import { CaseFilingResponse } from './caseFilingResponse';
-import { CaseFilingStatusRequest } from './caseFilingStatusRequest';
-import { CaseFilingStatusRequestStructure } from './caseFilingStatusRequestStructure';
-import { CaseFilingStatusResponse } from './caseFilingStatusResponse';
-import { CaseFilingStatusResponseStructure } from './caseFilingStatusResponseStructure';
-import { ChargebackAmountNameValueDetail } from './chargebackAmountNameValueDetail';
+import { AdjustmentDetails } from './adjustmentDetails';
+import { AdjustmentReversalDetails } from './adjustmentReversalDetails';
+import { AmountDetails } from './amountDetails';
+import { ArbitrationCaseCreate } from './arbitrationCaseCreate';
+import { CaseActionHistory } from './caseActionHistory';
+import { CaseCreateCaseId } from './caseCreateCaseId';
+import { CaseDetails } from './caseDetails';
+import { CaseDocumentAttributes } from './caseDocumentAttributes';
+import { CaseFilingSummaries } from './caseFilingSummaries';
+import { CaseTakeActionArbitration } from './caseTakeActionArbitration';
+import { CaseTakeActionCompliance } from './caseTakeActionCompliance';
+import { CaseTakeActionDocumentRetry } from './caseTakeActionDocumentRetry';
+import { CasesDocumentAttributes } from './casesDocumentAttributes';
 import { ChargebackDetails } from './chargebackDetails';
-import { ChargebackDocIndicatorsNameValueDetail } from './chargebackDocIndicatorsNameValueDetail';
-import { ChargebackEbdfStructure } from './chargebackEbdfStructure';
-import { ChargebackImageStatusRequest } from './chargebackImageStatusRequest';
-import { ChargebackImageStatusResponse } from './chargebackImageStatusResponse';
-import { ChargebackImageStatusResponseStructure } from './chargebackImageStatusResponseStructure';
-import { ChargebackMarkProcessedRequest } from './chargebackMarkProcessedRequest';
-import { ChargebackMarkProcessedRequestStructure } from './chargebackMarkProcessedRequestStructure';
-import { ChargebackMarkProcessedResponse } from './chargebackMarkProcessedResponse';
-import { ChargebackMarkProcessedResponseStructure } from './chargebackMarkProcessedResponseStructure';
-import { ChargebackMessageTextsNameValueDetail } from './chargebackMessageTextsNameValueDetail';
-import { ChargebackReasonCodesNameValueDetail } from './chargebackReasonCodesNameValueDetail';
-import { ChargebackResponse } from './chargebackResponse';
-import { ChargebackStatusRequest } from './chargebackStatusRequest';
-import { ChargebackStatusRequestStructure } from './chargebackStatusRequestStructure';
-import { ChargebackStatusResponse } from './chargebackStatusResponse';
-import { ChargebackStatusResponseStructure } from './chargebackStatusResponseStructure';
-import { ClaimDetail } from './claimDetail';
-import { ClaimResponse } from './claimResponse';
-import { ClaimSummary } from './claimSummary';
-import { ClearingDetail } from './clearingDetail';
-import { ClearingSummary } from './clearingSummary';
-import { CreateCaseRequest } from './createCaseRequest';
-import { CreateChargebackRequest } from './createChargebackRequest';
-import { CreateChargebackSingleRequest } from './createChargebackSingleRequest';
-import { CreateChargebackSingleReversalRequest } from './createChargebackSingleReversalRequest';
-import { CreateClaimRequest } from './createClaimRequest';
-import { CreateFeeRequest } from './createFeeRequest';
-import { CreateFeeRequestSingle } from './createFeeRequestSingle';
-import { CreateFraudMasterCardRequest } from './createFraudMasterCardRequest';
-import { CreateRetrievalRequest } from './createRetrievalRequest';
-import { CreateRetrievalRequestSingle } from './createRetrievalRequestSingle';
-import { CreateRetrievalResponse } from './createRetrievalResponse';
-import { CurrenciesNameValueDetail } from './currenciesNameValueDetail';
-import { Cycle } from './cycle';
-import { DocumentResponseStructure } from './documentResponseStructure';
-import { DocumentStructure } from './documentStructure';
-import { DocumentStructureResp } from './documentStructureResp';
-import { ErrorDetail } from './errorDetail';
+import { ChargebackReversal } from './chargebackReversal';
+import { ChargebackReversalDetails } from './chargebackReversalDetails';
+import { ChargebackReversalEventId } from './chargebackReversalEventId';
+import { ChargebackSingleMessage } from './chargebackSingleMessage';
+import { ChargebackSingleMessageReversal } from './chargebackSingleMessageReversal';
+import { ChargebackUpdate } from './chargebackUpdate';
+import { Claim } from './claim';
+import { ClaimCollaborationDetails } from './claimCollaborationDetails';
+import { ClaimCreateId } from './claimCreateId';
+import { ClaimDetails } from './claimDetails';
+import { ClaimSearch } from './claimSearch';
+import { ClaimTransactionDetails } from './claimTransactionDetails';
+import { ClaimTransactionSingleMessage } from './claimTransactionSingleMessage';
+import { ClaimValidActions } from './claimValidActions';
+import { ClaimsList } from './claimsList';
+import { CompletedDocumentAttributes } from './completedDocumentAttributes';
+import { ComplianceCaseCreate } from './complianceCaseCreate';
+import { CreateClaim } from './createClaim';
+import { CreatedReportDetails } from './createdReportDetails';
+import { DisputesCreateEventId } from './disputesCreateEventId';
+import { Document } from './document';
+import { DocumentAttributes } from './documentAttributes';
+import { DocumentAttributesList } from './documentAttributesList';
+import { DocumentRetrieve } from './documentRetrieve';
+import { DocumentUpload } from './documentUpload';
+import { Documents } from './documents';
+import { ErrorWrapper } from './errorWrapper';
 import { Errors } from './errors';
-import { ExpeditedBillingDrfDocumentStructure } from './expeditedBillingDrfDocumentStructure';
-import { FeeCountryCodesNameValueDetail } from './feeCountryCodesNameValueDetail';
-import { FeeDetails } from './feeDetails';
-import { FeeMessageTextsNameValueDetail } from './feeMessageTextsNameValueDetail';
-import { FeeReasonCodesNameValueDetail } from './feeReasonCodesNameValueDetail';
-import { FeeResponse } from './feeResponse';
-import { FeeSingleResponse } from './feeSingleResponse';
-import { FraudAcctDeviceTypesNameValueDetail } from './fraudAcctDeviceTypesNameValueDetail';
-import { FraudAcctStatusesNameValueDetail } from './fraudAcctStatusesNameValueDetail';
-import { FraudCardValidCodesNameValueDetail } from './fraudCardValidCodesNameValueDetail';
-import { FraudDrfDocumentStructure } from './fraudDrfDocumentStructure';
-import { FraudResponse } from './fraudResponse';
-import { FraudSubTypesNameValueDetail } from './fraudSubTypesNameValueDetail';
-import { GetQueueContentRequest } from './getQueueContentRequest';
-import { HealthCheckResponse } from './healthCheckResponse';
-import { InstallmentParameters } from './installmentParameters';
-import { IssuerFulfillmentRequest } from './issuerFulfillmentRequest';
-import { LoadDataForChargebackResponse } from './loadDataForChargebackResponse';
-import { LoadDataForChargebacksRequest } from './loadDataForChargebacksRequest';
-import { LoadDataForFeeResponse } from './loadDataForFeeResponse';
-import { LoadDataForFeesRequest } from './loadDataForFeesRequest';
-import { LoadDataForFraudResponse } from './loadDataForFraudResponse';
-import { LoadDataForRetrievalResponse } from './loadDataForRetrievalResponse';
+import { InitiateDispute } from './initiateDispute';
 import { ModelError } from './modelError';
-import { OriginalInformationInstallments } from './originalInformationInstallments';
-import { PointOfInteractionErrorsDrfDocumentStructure } from './pointOfInteractionErrorsDrfDocumentStructure';
 import { Queue } from './queue';
-import { QueueContentSummary } from './queueContentSummary';
-import { ReconReportDataAcknowledgeRequest } from './reconReportDataAcknowledgeRequest';
-import { ReconReportDataAcknowledgeResponse } from './reconReportDataAcknowledgeResponse';
-import { ReconReportDataRetrivalResponse } from './reconReportDataRetrivalResponse';
-import { RetrievalDocNeededNameValueDetail } from './retrievalDocNeededNameValueDetail';
-import { RetrievalReasonCodesNameValueDetail } from './retrievalReasonCodesNameValueDetail';
-import { RetrievalResponse } from './retrievalResponse';
-import { RetrievalStatusRequest } from './retrievalStatusRequest';
-import { RetrievalStatusRequestStructure } from './retrievalStatusRequestStructure';
-import { RetrievalStatusResponse } from './retrievalStatusResponse';
-import { RetrievalStatusResponseStructure } from './retrievalStatusResponseStructure';
-import { RetrievalSummary } from './retrievalSummary';
-import { RetrievalsImageStatusRequest } from './retrievalsImageStatusRequest';
-import { RetrievalsImageStatusResponse } from './retrievalsImageStatusResponse';
-import { RetrievalsImageStatusResponseStructure } from './retrievalsImageStatusResponseStructure';
-import { SingleMessageDetail } from './singleMessageDetail';
+import { QueueDefinition } from './queueDefinition';
+import { QueueDefinitionsList } from './queueDefinitionsList';
+import { QueueDetails } from './queueDetails';
+import { QueueField } from './queueField';
+import { QueueFieldNameValue } from './queueFieldNameValue';
+import { Report } from './report';
+import { ReportDefinition } from './reportDefinition';
+import { ReportDefinitionCriteria } from './reportDefinitionCriteria';
+import { ReportDefinitionList } from './reportDefinitionList';
+import { ReportDetails } from './reportDetails';
+import { ReportFilter } from './reportFilter';
+import { ReportList } from './reportList';
+import { ReportSearch } from './reportSearch';
+import { ReportsCreate } from './reportsCreate';
+import { ReportsStatus } from './reportsStatus';
+import { RepresentmentCreate } from './representmentCreate';
+import { RepresentmentCreateEventId } from './representmentCreateEventId';
+import { RepresentmentDetails } from './representmentDetails';
+import { RepresentmentDetailsSingleMessage } from './representmentDetailsSingleMessage';
+import { RepresentmentReversal } from './representmentReversal';
+import { RepresentmentReversalDetails } from './representmentReversalDetails';
+import { RepresentmentReversalDetailsSingleMessage } from './representmentReversalDetailsSingleMessage';
+import { RepresentmentReversalEventId } from './representmentReversalEventId';
+import { RepresentmentSingleMessage } from './representmentSingleMessage';
+import { RepresentmentSingleMessageReversal } from './representmentSingleMessageReversal';
+import { RepresentmentUpdate } from './representmentUpdate';
+import { SingleMessageChargebackDetails } from './singleMessageChargebackDetails';
+import { SingleMessageReversalDetails } from './singleMessageReversalDetails';
 import { SingleMessageSummary } from './singleMessageSummary';
-import { SingleMessageSummaryDetails } from './singleMessageSummaryDetails';
-import { SmsLinkedCaseFilingDrfDocumentStructure } from './smsLinkedCaseFilingDrfDocumentStructure';
-import { TransactionInformationEbdfStructure } from './transactionInformationEbdfStructure';
-import { TransactionSearchRequest } from './transactionSearchRequest';
-import { TransactionSingleMessageDetail } from './transactionSingleMessageDetail';
-import { TransactionSingleMessageSummary } from './transactionSingleMessageSummary';
-import { TransactionSingleMessageSummaryList } from './transactionSingleMessageSummaryList';
-import { TransactionSingleSearchRequest } from './transactionSingleSearchRequest';
-import { TransactionSummary } from './transactionSummary';
-import { UpdateCaseRequest } from './updateCaseRequest';
-import { UpdateChargebackRequest } from './updateChargebackRequest';
-import { UpdateClaimRequest } from './updateClaimRequest';
+import { TransactionData } from './transactionData';
+import { TransactionList } from './transactionList';
+import { TransactionSearch } from './transactionSearch';
+import { TransactionSingleMessage } from './transactionSingleMessage';
+import { ValidActionReasonCodes } from './validActionReasonCodes';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -266,171 +186,103 @@ let primitives = [
                  ];
 
 let enumsMap: {[index: string]: any} = {
-        "AcquirerFulfillmentRequest.AcquirerResponseCdEnum": AcquirerFulfillmentRequest.AcquirerResponseCdEnum,
-        "CardholderDisputeChargebackDrfDocumentStructure.TypeEnum": CardholderDisputeChargebackDrfDocumentStructure.TypeEnum,
-        "ChargebackDetails.ChargebackTypeEnum": ChargebackDetails.ChargebackTypeEnum,
-        "ChargebackImageStatusRequest.StatusEnum": ChargebackImageStatusRequest.StatusEnum,
-        "CreateCaseRequest.CaseTypeEnum": CreateCaseRequest.CaseTypeEnum,
-        "CreateCaseRequest.FilingAsEnum": CreateCaseRequest.FilingAsEnum,
-        "CreateCaseRequest.UpdatedChargebackReasonCodeEnum": CreateCaseRequest.UpdatedChargebackReasonCodeEnum,
-        "CreateCaseRequest.ChargebackReasonCodeEnum": CreateCaseRequest.ChargebackReasonCodeEnum,
-        "CreateChargebackRequest.ChargebackTypeEnum": CreateChargebackRequest.ChargebackTypeEnum,
-        "CreateChargebackSingleRequest.BrandEnum": CreateChargebackSingleRequest.BrandEnum,
-        "CreateChargebackSingleRequest.UsageCodeEnum": CreateChargebackSingleRequest.UsageCodeEnum,
-        "CreateChargebackSingleRequest.ChargebackTypeEnum": CreateChargebackSingleRequest.ChargebackTypeEnum,
-        "CreateChargebackSingleRequest.DataRecordTextEnum": CreateChargebackSingleRequest.DataRecordTextEnum,
-        "CreateChargebackSingleRequest.DocumentIndicatorEnum": CreateChargebackSingleRequest.DocumentIndicatorEnum,
-        "CreateChargebackSingleRequest.DocumentTypeEnum": CreateChargebackSingleRequest.DocumentTypeEnum,
-        "CreateChargebackSingleRequest.IllegibleItemCdEnum": CreateChargebackSingleRequest.IllegibleItemCdEnum,
-        "CreateChargebackSingleRequest.ProgramEnum": CreateChargebackSingleRequest.ProgramEnum,
-        "CreateChargebackSingleReversalRequest.ReversalReasonCodeEnum": CreateChargebackSingleReversalRequest.ReversalReasonCodeEnum,
-        "CreateClaimRequest.ClaimTypeEnum": CreateClaimRequest.ClaimTypeEnum,
-        "CreateFeeRequestSingle.ConditionIndicatorEnum": CreateFeeRequestSingle.ConditionIndicatorEnum,
-        "CreateFeeRequestSingle.FunctionCodeEnum": CreateFeeRequestSingle.FunctionCodeEnum,
-        "CreateFeeRequestSingle.ReasonCodeEnum": CreateFeeRequestSingle.ReasonCodeEnum,
-        "CreateFraudMasterCardRequest.AcctStatusEnum": CreateFraudMasterCardRequest.AcctStatusEnum,
-        "CreateFraudMasterCardRequest.ChgbkIndicatorEnum": CreateFraudMasterCardRequest.ChgbkIndicatorEnum,
-        "CreateFraudMasterCardRequest.CvcInvalidIndicatorEnum": CreateFraudMasterCardRequest.CvcInvalidIndicatorEnum,
-        "CreateFraudMasterCardRequest.DeviceTypeEnum": CreateFraudMasterCardRequest.DeviceTypeEnum,
-        "CreateFraudMasterCardRequest.FraudTypeEnum": CreateFraudMasterCardRequest.FraudTypeEnum,
-        "CreateFraudMasterCardRequest.SubTypeEnum": CreateFraudMasterCardRequest.SubTypeEnum,
-        "CreateRetrievalRequest.RetrievalRequestReasonEnum": CreateRetrievalRequest.RetrievalRequestReasonEnum,
-        "CreateRetrievalRequest.DocNeededEnum": CreateRetrievalRequest.DocNeededEnum,
-        "CreateRetrievalRequestSingle.DocumentTypeEnum": CreateRetrievalRequestSingle.DocumentTypeEnum,
-        "CreateRetrievalRequestSingle.UsageCodeEnum": CreateRetrievalRequestSingle.UsageCodeEnum,
-        "Cycle": Cycle,
-        "FraudDrfDocumentStructure.CardIssuerRegionEnum": FraudDrfDocumentStructure.CardIssuerRegionEnum,
-        "IssuerFulfillmentRequest.IssuerResponseCdEnum": IssuerFulfillmentRequest.IssuerResponseCdEnum,
-        "IssuerFulfillmentRequest.RejectReasonCdEnum": IssuerFulfillmentRequest.RejectReasonCdEnum,
-        "LoadDataForChargebacksRequest.ChargebackTypeEnum": LoadDataForChargebacksRequest.ChargebackTypeEnum,
-        "PointOfInteractionErrorsDrfDocumentStructure.TypeEnum": PointOfInteractionErrorsDrfDocumentStructure.TypeEnum,
-        "RetrievalsImageStatusRequest.StatusEnum": RetrievalsImageStatusRequest.StatusEnum,
-        "UpdateCaseRequest.ActionEnum": UpdateCaseRequest.ActionEnum,
-        "UpdateCaseRequest.RebuttedAsEnum": UpdateCaseRequest.RebuttedAsEnum,
-        "UpdateCaseRequest.DocRetryAsEnum": UpdateCaseRequest.DocRetryAsEnum,
-        "UpdateClaimRequest.ActionEnum": UpdateClaimRequest.ActionEnum,
-        "UpdateClaimRequest.CloseClaimReasonCodeEnum": UpdateClaimRequest.CloseClaimReasonCodeEnum,
+        "CaseTakeActionArbitration.ActionEnum": CaseTakeActionArbitration.ActionEnum,
+        "CaseTakeActionCompliance.ActionEnum": CaseTakeActionCompliance.ActionEnum,
+        "CaseTakeActionCompliance.RebuttalPartyEnum": CaseTakeActionCompliance.RebuttalPartyEnum,
+        "CaseTakeActionDocumentRetry.RebuttalPartyEnum": CaseTakeActionDocumentRetry.RebuttalPartyEnum,
+        "ChargebackSingleMessage.NoShowReasonEnum": ChargebackSingleMessage.NoShowReasonEnum,
+        "ChargebackSingleMessage.NoShowCodeEnum": ChargebackSingleMessage.NoShowCodeEnum,
+        "ClaimSearch.ContextTypeEnum": ClaimSearch.ContextTypeEnum,
+        "ComplianceCaseCreate.FilingAsEnum": ComplianceCaseCreate.FilingAsEnum,
+        "ComplianceCaseCreate.ViolationCodeEnum": ComplianceCaseCreate.ViolationCodeEnum,
+        "CreateClaim.ContextTypeEnum": CreateClaim.ContextTypeEnum,
+        "ReportFilter.FilterNameEnum": ReportFilter.FilterNameEnum,
+        "ReportSearch.ReportStatusEnum": ReportSearch.ReportStatusEnum,
+        "ReportSearch.SortKeyEnum": ReportSearch.SortKeyEnum,
+        "ReportSearch.SortOrderEnum": ReportSearch.SortOrderEnum,
+        "ReportsCreate.FormatEnum": ReportsCreate.FormatEnum,
 }
 
 let typeMap: {[index: string]: any} = {
-    "AcquirerFulfillmentRequest": AcquirerFulfillmentRequest,
-    "AcquirerFulfillmentResponse": AcquirerFulfillmentResponse,
-    "AuthorizationDetail": AuthorizationDetail,
-    "AuthorizationSummary": AuthorizationSummary,
-    "CardholderDisputeChargebackDrfDocumentStructure": CardholderDisputeChargebackDrfDocumentStructure,
-    "CardholderVerificationMethodStructure": CardholderVerificationMethodStructure,
-    "CaseFilingClaim": CaseFilingClaim,
-    "CaseFilingClaimsRequest": CaseFilingClaimsRequest,
-    "CaseFilingClaimsResponse": CaseFilingClaimsResponse,
-    "CaseFilingDetails": CaseFilingDetails,
-    "CaseFilingEbdfStructure": CaseFilingEbdfStructure,
-    "CaseFilingIdSourceRequest": CaseFilingIdSourceRequest,
-    "CaseFilingImageStatusRequest": CaseFilingImageStatusRequest,
-    "CaseFilingImageStatusResponse": CaseFilingImageStatusResponse,
-    "CaseFilingImageStatusResponseStructure": CaseFilingImageStatusResponseStructure,
-    "CaseFilingLifeCycle": CaseFilingLifeCycle,
-    "CaseFilingRespHistory": CaseFilingRespHistory,
-    "CaseFilingResponse": CaseFilingResponse,
-    "CaseFilingStatusRequest": CaseFilingStatusRequest,
-    "CaseFilingStatusRequestStructure": CaseFilingStatusRequestStructure,
-    "CaseFilingStatusResponse": CaseFilingStatusResponse,
-    "CaseFilingStatusResponseStructure": CaseFilingStatusResponseStructure,
-    "ChargebackAmountNameValueDetail": ChargebackAmountNameValueDetail,
+    "AdjustmentDetails": AdjustmentDetails,
+    "AdjustmentReversalDetails": AdjustmentReversalDetails,
+    "AmountDetails": AmountDetails,
+    "ArbitrationCaseCreate": ArbitrationCaseCreate,
+    "CaseActionHistory": CaseActionHistory,
+    "CaseCreateCaseId": CaseCreateCaseId,
+    "CaseDetails": CaseDetails,
+    "CaseDocumentAttributes": CaseDocumentAttributes,
+    "CaseFilingSummaries": CaseFilingSummaries,
+    "CaseTakeActionArbitration": CaseTakeActionArbitration,
+    "CaseTakeActionCompliance": CaseTakeActionCompliance,
+    "CaseTakeActionDocumentRetry": CaseTakeActionDocumentRetry,
+    "CasesDocumentAttributes": CasesDocumentAttributes,
     "ChargebackDetails": ChargebackDetails,
-    "ChargebackDocIndicatorsNameValueDetail": ChargebackDocIndicatorsNameValueDetail,
-    "ChargebackEbdfStructure": ChargebackEbdfStructure,
-    "ChargebackImageStatusRequest": ChargebackImageStatusRequest,
-    "ChargebackImageStatusResponse": ChargebackImageStatusResponse,
-    "ChargebackImageStatusResponseStructure": ChargebackImageStatusResponseStructure,
-    "ChargebackMarkProcessedRequest": ChargebackMarkProcessedRequest,
-    "ChargebackMarkProcessedRequestStructure": ChargebackMarkProcessedRequestStructure,
-    "ChargebackMarkProcessedResponse": ChargebackMarkProcessedResponse,
-    "ChargebackMarkProcessedResponseStructure": ChargebackMarkProcessedResponseStructure,
-    "ChargebackMessageTextsNameValueDetail": ChargebackMessageTextsNameValueDetail,
-    "ChargebackReasonCodesNameValueDetail": ChargebackReasonCodesNameValueDetail,
-    "ChargebackResponse": ChargebackResponse,
-    "ChargebackStatusRequest": ChargebackStatusRequest,
-    "ChargebackStatusRequestStructure": ChargebackStatusRequestStructure,
-    "ChargebackStatusResponse": ChargebackStatusResponse,
-    "ChargebackStatusResponseStructure": ChargebackStatusResponseStructure,
-    "ClaimDetail": ClaimDetail,
-    "ClaimResponse": ClaimResponse,
-    "ClaimSummary": ClaimSummary,
-    "ClearingDetail": ClearingDetail,
-    "ClearingSummary": ClearingSummary,
-    "CreateCaseRequest": CreateCaseRequest,
-    "CreateChargebackRequest": CreateChargebackRequest,
-    "CreateChargebackSingleRequest": CreateChargebackSingleRequest,
-    "CreateChargebackSingleReversalRequest": CreateChargebackSingleReversalRequest,
-    "CreateClaimRequest": CreateClaimRequest,
-    "CreateFeeRequest": CreateFeeRequest,
-    "CreateFeeRequestSingle": CreateFeeRequestSingle,
-    "CreateFraudMasterCardRequest": CreateFraudMasterCardRequest,
-    "CreateRetrievalRequest": CreateRetrievalRequest,
-    "CreateRetrievalRequestSingle": CreateRetrievalRequestSingle,
-    "CreateRetrievalResponse": CreateRetrievalResponse,
-    "CurrenciesNameValueDetail": CurrenciesNameValueDetail,
-    "DocumentResponseStructure": DocumentResponseStructure,
-    "DocumentStructure": DocumentStructure,
-    "DocumentStructureResp": DocumentStructureResp,
-    "ErrorDetail": ErrorDetail,
+    "ChargebackReversal": ChargebackReversal,
+    "ChargebackReversalDetails": ChargebackReversalDetails,
+    "ChargebackReversalEventId": ChargebackReversalEventId,
+    "ChargebackSingleMessage": ChargebackSingleMessage,
+    "ChargebackSingleMessageReversal": ChargebackSingleMessageReversal,
+    "ChargebackUpdate": ChargebackUpdate,
+    "Claim": Claim,
+    "ClaimCollaborationDetails": ClaimCollaborationDetails,
+    "ClaimCreateId": ClaimCreateId,
+    "ClaimDetails": ClaimDetails,
+    "ClaimSearch": ClaimSearch,
+    "ClaimTransactionDetails": ClaimTransactionDetails,
+    "ClaimTransactionSingleMessage": ClaimTransactionSingleMessage,
+    "ClaimValidActions": ClaimValidActions,
+    "ClaimsList": ClaimsList,
+    "CompletedDocumentAttributes": CompletedDocumentAttributes,
+    "ComplianceCaseCreate": ComplianceCaseCreate,
+    "CreateClaim": CreateClaim,
+    "CreatedReportDetails": CreatedReportDetails,
+    "DisputesCreateEventId": DisputesCreateEventId,
+    "Document": Document,
+    "DocumentAttributes": DocumentAttributes,
+    "DocumentAttributesList": DocumentAttributesList,
+    "DocumentRetrieve": DocumentRetrieve,
+    "DocumentUpload": DocumentUpload,
+    "Documents": Documents,
+    "ErrorWrapper": ErrorWrapper,
     "Errors": Errors,
-    "ExpeditedBillingDrfDocumentStructure": ExpeditedBillingDrfDocumentStructure,
-    "FeeCountryCodesNameValueDetail": FeeCountryCodesNameValueDetail,
-    "FeeDetails": FeeDetails,
-    "FeeMessageTextsNameValueDetail": FeeMessageTextsNameValueDetail,
-    "FeeReasonCodesNameValueDetail": FeeReasonCodesNameValueDetail,
-    "FeeResponse": FeeResponse,
-    "FeeSingleResponse": FeeSingleResponse,
-    "FraudAcctDeviceTypesNameValueDetail": FraudAcctDeviceTypesNameValueDetail,
-    "FraudAcctStatusesNameValueDetail": FraudAcctStatusesNameValueDetail,
-    "FraudCardValidCodesNameValueDetail": FraudCardValidCodesNameValueDetail,
-    "FraudDrfDocumentStructure": FraudDrfDocumentStructure,
-    "FraudResponse": FraudResponse,
-    "FraudSubTypesNameValueDetail": FraudSubTypesNameValueDetail,
-    "GetQueueContentRequest": GetQueueContentRequest,
-    "HealthCheckResponse": HealthCheckResponse,
-    "InstallmentParameters": InstallmentParameters,
-    "IssuerFulfillmentRequest": IssuerFulfillmentRequest,
-    "LoadDataForChargebackResponse": LoadDataForChargebackResponse,
-    "LoadDataForChargebacksRequest": LoadDataForChargebacksRequest,
-    "LoadDataForFeeResponse": LoadDataForFeeResponse,
-    "LoadDataForFeesRequest": LoadDataForFeesRequest,
-    "LoadDataForFraudResponse": LoadDataForFraudResponse,
-    "LoadDataForRetrievalResponse": LoadDataForRetrievalResponse,
+    "InitiateDispute": InitiateDispute,
     "ModelError": ModelError,
-    "OriginalInformationInstallments": OriginalInformationInstallments,
-    "PointOfInteractionErrorsDrfDocumentStructure": PointOfInteractionErrorsDrfDocumentStructure,
     "Queue": Queue,
-    "QueueContentSummary": QueueContentSummary,
-    "ReconReportDataAcknowledgeRequest": ReconReportDataAcknowledgeRequest,
-    "ReconReportDataAcknowledgeResponse": ReconReportDataAcknowledgeResponse,
-    "ReconReportDataRetrivalResponse": ReconReportDataRetrivalResponse,
-    "RetrievalDocNeededNameValueDetail": RetrievalDocNeededNameValueDetail,
-    "RetrievalReasonCodesNameValueDetail": RetrievalReasonCodesNameValueDetail,
-    "RetrievalResponse": RetrievalResponse,
-    "RetrievalStatusRequest": RetrievalStatusRequest,
-    "RetrievalStatusRequestStructure": RetrievalStatusRequestStructure,
-    "RetrievalStatusResponse": RetrievalStatusResponse,
-    "RetrievalStatusResponseStructure": RetrievalStatusResponseStructure,
-    "RetrievalSummary": RetrievalSummary,
-    "RetrievalsImageStatusRequest": RetrievalsImageStatusRequest,
-    "RetrievalsImageStatusResponse": RetrievalsImageStatusResponse,
-    "RetrievalsImageStatusResponseStructure": RetrievalsImageStatusResponseStructure,
-    "SingleMessageDetail": SingleMessageDetail,
+    "QueueDefinition": QueueDefinition,
+    "QueueDefinitionsList": QueueDefinitionsList,
+    "QueueDetails": QueueDetails,
+    "QueueField": QueueField,
+    "QueueFieldNameValue": QueueFieldNameValue,
+    "Report": Report,
+    "ReportDefinition": ReportDefinition,
+    "ReportDefinitionCriteria": ReportDefinitionCriteria,
+    "ReportDefinitionList": ReportDefinitionList,
+    "ReportDetails": ReportDetails,
+    "ReportFilter": ReportFilter,
+    "ReportList": ReportList,
+    "ReportSearch": ReportSearch,
+    "ReportsCreate": ReportsCreate,
+    "ReportsStatus": ReportsStatus,
+    "RepresentmentCreate": RepresentmentCreate,
+    "RepresentmentCreateEventId": RepresentmentCreateEventId,
+    "RepresentmentDetails": RepresentmentDetails,
+    "RepresentmentDetailsSingleMessage": RepresentmentDetailsSingleMessage,
+    "RepresentmentReversal": RepresentmentReversal,
+    "RepresentmentReversalDetails": RepresentmentReversalDetails,
+    "RepresentmentReversalDetailsSingleMessage": RepresentmentReversalDetailsSingleMessage,
+    "RepresentmentReversalEventId": RepresentmentReversalEventId,
+    "RepresentmentSingleMessage": RepresentmentSingleMessage,
+    "RepresentmentSingleMessageReversal": RepresentmentSingleMessageReversal,
+    "RepresentmentUpdate": RepresentmentUpdate,
+    "SingleMessageChargebackDetails": SingleMessageChargebackDetails,
+    "SingleMessageReversalDetails": SingleMessageReversalDetails,
     "SingleMessageSummary": SingleMessageSummary,
-    "SingleMessageSummaryDetails": SingleMessageSummaryDetails,
-    "SmsLinkedCaseFilingDrfDocumentStructure": SmsLinkedCaseFilingDrfDocumentStructure,
-    "TransactionInformationEbdfStructure": TransactionInformationEbdfStructure,
-    "TransactionSearchRequest": TransactionSearchRequest,
-    "TransactionSingleMessageDetail": TransactionSingleMessageDetail,
-    "TransactionSingleMessageSummary": TransactionSingleMessageSummary,
-    "TransactionSingleMessageSummaryList": TransactionSingleMessageSummaryList,
-    "TransactionSingleSearchRequest": TransactionSingleSearchRequest,
-    "TransactionSummary": TransactionSummary,
-    "UpdateCaseRequest": UpdateCaseRequest,
-    "UpdateChargebackRequest": UpdateChargebackRequest,
-    "UpdateClaimRequest": UpdateClaimRequest,
+    "TransactionData": TransactionData,
+    "TransactionList": TransactionList,
+    "TransactionSearch": TransactionSearch,
+    "TransactionSingleMessage": TransactionSingleMessage,
+    "ValidActionReasonCodes": ValidActionReasonCodes,
 }
 
 export class ObjectSerializer {

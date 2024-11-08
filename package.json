@@ -1,7 +1,7 @@
 {
-  "name": "mastercom_api_client",
+  "name": "mastercom_extended_api_client",
   "version": "1.0.0",
-  "description": "Generated Mastercom API client",
+  "description": "Generated Mastercom Extended API client",
   "main": "api.js",
   "scripts": {
     "postinstall": "npm run build",
