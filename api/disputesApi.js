@@ -51,7 +51,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DisputesApi = exports.DisputesApiApiKeys = void 0;
-var request_1 = __importDefault(require("request"));
+var dropin_request_1 = __importDefault(require("dropin-request"));
 var models_1 = require("../model/models");
 var apis_1 = require("./apis");
 var defaultBasePath = 'https://dispute.mastercard.com/mastercom-extended';
@@ -181,7 +181,7 @@ var DisputesApi = /** @class */ (function () {
                             }
                         }
                         return new Promise(function (resolve, reject) {
-                            (0, request_1.default)(localVarRequestOptions, function (error, response, body) {
+                            (0, dropin_request_1.default)(localVarRequestOptions, function (error, response, body) {
                                 if (error) {
                                     reject(error);
                                 }
