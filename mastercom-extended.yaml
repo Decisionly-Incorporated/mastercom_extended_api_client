@@ -38,6 +38,8 @@ tags:
     description: Create, update, or reverse a representment
   - name: Transactions
     description: Search for transactions
+  - name: Fraud
+    description: Submit confirmed fraud
 paths:
   "/documents":
     post:
@@ -733,6 +735,33 @@ paths:
       responses:
         "200":
           $ref: "#/components/responses/CasesDocumentAttributes"
+        "400":
+          $ref: "#/components/responses/BadRequestErrorResponse"
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorResponse"
+        "403":
+          $ref: "#/components/responses/ForbiddenErrorResponse"
+        "404":
+          $ref: "#/components/responses/NotFoundErrorResponse"
+
+  "/claims/{claim_id}/frauds":
+    post:
+      summary: Submit confirmed fraud
+      tags:
+        - Fraud
+      description: |
+        Use this endpoint to submit confirmed fraud to Mastercom for submission to FLD.
+        | Audience (User)  | Type  |
+        | ----------- | ----------- |
+        | Issuers   | Conventional disputes |
+      operationId: reportFraud
+      parameters:
+        - $ref: "#/components/parameters/ClaimIdParameter"
+      requestBody:
+        $ref: "#/components/requestBodies/ReportFraud"
+      responses:
+        "201":
+          $ref: "#/components/responses/FraudReportEvent"
         "400":
           $ref: "#/components/responses/BadRequestErrorResponse"
         "401":
@@ -3519,6 +3548,87 @@ components:
           example: "5415063"
         caseStatus:
           $ref: "#/components/schemas/CaseStatus"
+    FraudReportEventId:
+      type: object
+      properties:
+        eventId:
+          $ref: "#/components/schemas/EventId"
+    ReportFraud:
+      type: object
+      required:
+        - accountDeviceType
+        - fraudType
+        - fraudSubType
+        - cardInPossession
+      properties:
+        accountDeviceType:
+          type: string
+          enum:
+            - N_1_CHIP_ONLY_WITH_PIN
+            - N_2_CHIP_ONLY_WITHOUT_PIN
+            - N_3_MAGNETIC_STRIPE_ONLY
+            - N_4_CONTACTLESS_ONLY
+            - A_CHIP_WITH_PIN_AND_MAGNETIC_STRIPE_ONLY
+            - B_CHIP_WITH_PIN_AND_CONTACTLESS_ONLY
+            - C_CHIP_WITH_PIN_AND_MAGNETIC_STRIPE_AND_CONTACTLESS
+            - D_CHIP_WITHOUT_PIN_AND_WITH_MAGNETIC_STRIPE
+            - E_CHIP_WITHOUT_PIN_AND_WITH_CONTACTLESS
+            - F_CHIP_WITHOUT_PIN_AND_WITH_MAGNETIC_STRIPE_AND_WITH_CONTACTLESS
+            - G_MAGNETIC_STRIPE_WITH_ONLY_PIN
+            - H_MAGNETIC_STRIPE_AND_CONTACTLESS_ONLY
+            - I_CHIP_WITHOUT_PIN_AND_WITHOUT_MAGNETIC_STRIPE
+            - J_INTERNET_CARD
+          description: Indicates the technology supported by the account including magnetic stripe, chip, PIN, or contactless.
+          example: "N_1_CHIP_ONLY_WITH_PIN"
+        fraudType:
+          type: string
+          enum:
+            - N_00_LOST_FRAUD
+            - N_01_STOLEN_FRAUD
+            - N_02_NEVER_RECEIVED_ISSUE
+            - N_03_FRAUDULENT_APPLICATION
+            - N_04_COUNTERFEIT_CARD_FRAUD
+            - N_05_ACCOUNT_TAKEOVER_FRAUD
+            - N_06_CARD_NOT_PRESENT_FRAUD
+            - N_51_BUST_OUT_COLLUSIVE_MERCHANT
+            - N_55_MODIFICATION_OF_PAYMENT_ORDER
+            - N_56_MANIPULATION_OF_CARDHOLDER
+            - N_57_FIRST_PARTY_MISUSE
+          description: Identifies the reason the issuer submitted the transaction as fraud to Mastercom for submission to FLD.
+          example: "N_00_LOST_FRAUD"
+        fraudSubType:
+          type: string
+          enum:
+            - K_CONVENIENCE_OR_BALANCE_TRANSFER_CHECK_TRANSACTION
+            - N_PIN_NOT_USED_IN_TRANSACTION
+            - P_PIN_USED_IN_TRANSACTION
+            - U_UNKNOWN
+            - H_PURCHASE_SCAM
+            - R_ROMANCE_SCAM
+            - I_IMPERSONATION_SCAM
+            - V_INVESTMENT_SCAM
+            - A_ADVANCE_FEE_SCAM
+          description: Provides more information regarding fraud transaction to Mastercom for submission to FLD.
+          example: "K_CONVENIENCE_OR_BALANCE_TRANSFER_CHECK_TRANSACTION"
+        cardInPossession:
+          type: string
+          enum:
+            - "YES"
+            - "NO"
+            - "UNKNOWN"
+          description: Indicates if the cardholder was in possession of the card at the time the fraud occurred.
+          example: "YES"
+        cardholderReportedDate:
+          type: string
+          format: date
+          description: Date on which the cardholder reported the fraud, expressed in the cardholder's local time zone, not in UTC.
+          example: "2025-01-05"
+        memo:
+          type: string
+          minLength: 1
+          maxLength: 1000
+          description: Additional information or note may be entered in this field. Credentials, card numbers, and similar sensitive information such as PCI or PII data should never be entered in this field.
+          example: "Memo text"
 
   requestBodies:
     Document:
@@ -3661,6 +3771,12 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/CaseTakeActionDocumentRetry"
+    ReportFraud:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ReportFraud"
   responses:
     DocumentRetrieve:
       description: Ok
@@ -3895,6 +4011,18 @@ components:
                       Description: Resource not found
                       Recoverable: false
                       Details: Resource not found
+    FraudReportEvent:
+      description: Created
+      headers:
+        Location:
+          schema:
+            type: string
+          description: Location header for Report Fraud
+          example: "/claims/7000000000000022591"
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/FraudReportEventId"
     BadRequestErrorResponse:
       description: Bad Request
       content:

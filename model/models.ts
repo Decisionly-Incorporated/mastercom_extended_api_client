@@ -42,6 +42,7 @@ export * from './documentUpload';
 export * from './documents';
 export * from './errorWrapper';
 export * from './errors';
+export * from './fraudReportEventId';
 export * from './initiateDispute';
 export * from './modelError';
 export * from './queue';
@@ -56,6 +57,7 @@ export * from './reportDefinitionCriteria';
 export * from './reportDefinitionList';
 export * from './reportDetails';
 export * from './reportFilter';
+export * from './reportFraud';
 export * from './reportList';
 export * from './reportSearch';
 export * from './reportsCreate';
@@ -135,6 +137,7 @@ import { DocumentUpload } from './documentUpload';
 import { Documents } from './documents';
 import { ErrorWrapper } from './errorWrapper';
 import { Errors } from './errors';
+import { FraudReportEventId } from './fraudReportEventId';
 import { InitiateDispute } from './initiateDispute';
 import { ModelError } from './modelError';
 import { Queue } from './queue';
@@ -149,6 +152,7 @@ import { ReportDefinitionCriteria } from './reportDefinitionCriteria';
 import { ReportDefinitionList } from './reportDefinitionList';
 import { ReportDetails } from './reportDetails';
 import { ReportFilter } from './reportFilter';
+import { ReportFraud } from './reportFraud';
 import { ReportList } from './reportList';
 import { ReportSearch } from './reportSearch';
 import { ReportsCreate } from './reportsCreate';
@@ -197,6 +201,10 @@ let enumsMap: {[index: string]: any} = {
         "ComplianceCaseCreate.ViolationCodeEnum": ComplianceCaseCreate.ViolationCodeEnum,
         "CreateClaim.ContextTypeEnum": CreateClaim.ContextTypeEnum,
         "ReportFilter.FilterNameEnum": ReportFilter.FilterNameEnum,
+        "ReportFraud.AccountDeviceTypeEnum": ReportFraud.AccountDeviceTypeEnum,
+        "ReportFraud.FraudTypeEnum": ReportFraud.FraudTypeEnum,
+        "ReportFraud.FraudSubTypeEnum": ReportFraud.FraudSubTypeEnum,
+        "ReportFraud.CardInPossessionEnum": ReportFraud.CardInPossessionEnum,
         "ReportSearch.ReportStatusEnum": ReportSearch.ReportStatusEnum,
         "ReportSearch.SortKeyEnum": ReportSearch.SortKeyEnum,
         "ReportSearch.SortOrderEnum": ReportSearch.SortOrderEnum,
@@ -246,6 +254,7 @@ let typeMap: {[index: string]: any} = {
     "Documents": Documents,
     "ErrorWrapper": ErrorWrapper,
     "Errors": Errors,
+    "FraudReportEventId": FraudReportEventId,
     "InitiateDispute": InitiateDispute,
     "ModelError": ModelError,
     "Queue": Queue,
@@ -260,6 +269,7 @@ let typeMap: {[index: string]: any} = {
     "ReportDefinitionList": ReportDefinitionList,
     "ReportDetails": ReportDetails,
     "ReportFilter": ReportFilter,
+    "ReportFraud": ReportFraud,
     "ReportList": ReportList,
     "ReportSearch": ReportSearch,
     "ReportsCreate": ReportsCreate,

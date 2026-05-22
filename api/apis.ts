@@ -10,6 +10,8 @@ export * from './disputesApi';
 import { DisputesApi } from './disputesApi';
 export * from './documentsApi';
 import { DocumentsApi } from './documentsApi';
+export * from './fraudApi';
+import { FraudApi } from './fraudApi';
 export * from './queuesApi';
 import { QueuesApi } from './queuesApi';
 export * from './reportDefinitionsApi';
@@ -31,4 +33,4 @@ export class HttpError extends Error {
 
 export { RequestFile } from '../model/models';
 
-export const APIS = [CaseFilingApi, CaseFilingDocumentsApi, ChargebacksApi, ClaimsApi, DisputesApi, DocumentsApi, QueuesApi, ReportDefinitionsApi, ReportsApi, RepresentmentsApi, TransactionsApi];
+export const APIS = [CaseFilingApi, CaseFilingDocumentsApi, ChargebacksApi, ClaimsApi, DisputesApi, DocumentsApi, FraudApi, QueuesApi, ReportDefinitionsApi, ReportsApi, RepresentmentsApi, TransactionsApi];
