@@ -7,6 +7,7 @@ api/chargebacksApi.ts
 api/claimsApi.ts
 api/disputesApi.ts
 api/documentsApi.ts
+api/fraudApi.ts
 api/queuesApi.ts
 api/reportDefinitionsApi.ts
 api/reportsApi.ts
@@ -55,6 +56,7 @@ model/documentUpload.ts
 model/documents.ts
 model/errorWrapper.ts
 model/errors.ts
+model/fraudReportEventId.ts
 model/initiateDispute.ts
 model/modelError.ts
 model/models.ts
@@ -70,6 +72,7 @@ model/reportDefinitionCriteria.ts
 model/reportDefinitionList.ts
 model/reportDetails.ts
 model/reportFilter.ts
+model/reportFraud.ts
 model/reportList.ts
 model/reportSearch.ts
 model/reportsCreate.ts
