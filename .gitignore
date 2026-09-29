@@ -5,4 +5,3 @@ dist
 *.js
 .idea/*
 *.iml
-package-lock.json
